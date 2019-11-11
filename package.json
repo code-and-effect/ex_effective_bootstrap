@@ -9,9 +9,10 @@
     "type": "git",
     "url": "git://github.com/code-and-effect/ex_effective_bootstrap.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -p --watch-stdin --color --devtool source-map"
+  "dependencies": {
+    "jquery": "*",
+    "popper.js": "^1.16.0",
+    "bootstrap": "^4.3.1"
   },
   "files": [
     "README.md",

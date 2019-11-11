@@ -1,1 +1,3 @@
-console.log("ex_effective_bootstrap.js");
+import css from "../css/ex_effective_bootstrap.scss"
+
+import "./form"

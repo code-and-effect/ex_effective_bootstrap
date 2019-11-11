@@ -61,3 +61,7 @@ import "bootstrap"
 import "phoenix_html"
 import "ex_effective_bootstrap"
 ```
+
+cd assets\
+npm install
+npm run start
