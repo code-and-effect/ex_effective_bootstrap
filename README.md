@@ -31,3 +31,33 @@ def view do
 end
 ```
 
+Add to your `assets/package.json`, underneath `phoenix_html` the following:
+
+```
+"dependencies": {
+  "bootstrap": "^4.3.1",
+  "jquery": "^3.4.1",
+  "phoenix": "file:../deps/phoenix",
+  "phoenix_html": "file:../deps/phoenix_html",
+  "phoenix_live_view": "file:../deps/phoenix_live_view",
+  "popper.js": "^1.16.0",
+  "ex_effective_bootstrap": "file../deps/ex_effective_bootstrap"
+}
+```
+
+Link the deps:
+
+```
+~/Sites/tradesway/deps: ln -sf ../../ex_effective_bootstrap/
+```
+
+cd assets/
+npm install
+
+Add to your `app.js`:
+
+```
+import "bootstrap"
+import "phoenix_html"
+import "ex_effective_bootstrap"
+```

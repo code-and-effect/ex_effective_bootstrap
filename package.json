@@ -1,0 +1,21 @@
+{
+  "name": "ex_effective_bootstrap",
+  "version": "0.1.0",
+  "description": "ExEffectiveBootstrap Javascript",
+  "author": "Code and Effect",
+  "license": "MIT",
+  "main": "./priv/static/ex_effective_bootstrap.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/code-and-effect/ex_effective_bootstrap.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack -p --watch-stdin --color --devtool source-map"
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "priv/static/ex_effective_bootstrap.js"
+  ]
+}
