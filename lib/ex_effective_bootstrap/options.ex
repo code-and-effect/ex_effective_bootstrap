@@ -24,7 +24,8 @@ defmodule ExEffectiveBootstrap.Options do
       invalid: invalid_feedback_options(form, field, options),
       type: input_field_type(form, field, options),
       wrapper: wrapper_options(form, field, options),
-      input: input_field_options(form, field, options)
+      input: input_field_options(form, field, options),
+      hint: hint_options(form, field, options)
     }
   end
 
@@ -36,7 +37,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp label_options(_form, _field, options), do: options[:label]
 
-  defp valid_feedback_options(_form, _field, options) do
+  defp valid_feedback_options(form, field, options) do
     Keyword.get(options, :valid_feedback, Feedback.valid(form, field, options))
   end
 
@@ -54,18 +55,26 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp input_field_options(form, field, options) do
     default = [class: "form-control"]
-    options = Keyword.drop(options, [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper])
     validations = PhxForm.input_validations(form, field)
     with_errors = with_errors_class(form, field)
+    with_hint = with_hint_options(form, field, options)
+    options = Keyword.drop(options, [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint])
 
     default
     |> merge(validations)
     |> merge(with_errors)
+    |> merge(with_hint)
     |> merge(options)
   end
 
+  defp hint_options(_form, _field, options), do: options[:hint]
+
   defp with_errors_class(form) do
     if with_errors?(form), do: [class: "with-errors"], else: []
+  end
+
+  defp with_hint_options(form, field, options) do
+    if options[:hint], do: ["aria-describedby": "#{input_id(form, field)}_hint"], else: []
   end
 
   defp with_errors_class(form, field) do
