@@ -65,3 +65,29 @@ import "ex_effective_bootstrap"
 cd assets\
 npm install
 npm run start
+
+
+```
+<%= effective_form_for @changeset, @action, fn a -> %>
+  <%= bootstrap_input a, :email, :email %>
+  <%= bootstrap_input a, :password, :password %>
+
+  <%= submit "Sign in", class: "btn-form btn-block" %>
+<% end %>
+
+<hr>
+
+<%= b = effective_form_for @changeset, @action, [class: "asdf"] %>
+  <%= bootstrap_input b, :email, :email %>
+  <%= bootstrap_input b, :password, :password %>
+  <%= submit "Sign in", class: "btn-form btn-block" %>
+</form>
+
+<hr>
+
+<%= c = effective_form_for @changeset, @action %>
+  <%= bootstrap_input b, :email, :email %>
+  <%= bootstrap_input b, :password, :password %>
+  <%= submit "Sign in", class: "btn-form btn-block" %>
+</form>
+```
