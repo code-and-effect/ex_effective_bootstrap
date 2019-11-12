@@ -1,8 +1,9 @@
 defmodule ExEffectiveBootstrap.Options do
   use Phoenix.HTML
   alias Phoenix.HTML.Form, as: PhxForm
+  alias ExEffectiveBootstrap.Feedback
 
-  def form_options(form_data, options \\ []) do
+  def form_options(form, options \\ []) do
     default = [
       class: "effective-form needs-validation",
       novalidate: true,
@@ -18,12 +19,12 @@ defmodule ExEffectiveBootstrap.Options do
 
   def input_options(form, field, options) do
     %{
-      label: options[:label],
-      valid: options[:valid_feedback],
-      invalid: options[:invalid_feedback],
-      input: input_field_options(form, field, options),
+      label: label_options(form, field, options),
+      valid: valid_feedback_options(form, field, options),
+      invalid: invalid_feedback_options(form, field, options),
       type: input_field_type(form, field, options),
       wrapper: wrapper_options(form, field, options),
+      input: input_field_options(form, field, options)
     }
   end
 
@@ -33,7 +34,17 @@ defmodule ExEffectiveBootstrap.Options do
     Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
   end
 
-  def input_field_type(form, field, options) do
+  defp label_options(_form, _field, options), do: options[:label]
+
+  defp valid_feedback_options(_form, _field, options) do
+    Keyword.get(options, :valid_feedback, Feedback.valid(form, field, options))
+  end
+
+  defp invalid_feedback_options(form, field, options) do
+    Keyword.get(options, :invalid_feedback, Feedback.invalid(form, field, options))
+  end
+
+  defp input_field_type(form, field, options) do
     options[:type] || options[:as] || PhxForm.input_type(form, field)
   end
 
@@ -53,11 +64,11 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(options)
   end
 
-  defp with_errors_options(form) do
+  defp with_errors_class(form) do
     if with_errors?(form), do: [class: "with-errors"], else: []
   end
 
-  defp with_errors_options(form, field) do
+  defp with_errors_class(form, field) do
     cond do
       !with_errors?(form) -> []
       form.source.errors[field] -> [class: "is-invalid"]

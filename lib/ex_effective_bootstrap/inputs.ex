@@ -1,7 +1,7 @@
 defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
   alias Phoenix.HTML.Form, as: PhxForm
-  alias ExEffectiveBootstrap.{Feedback, Options}
+  alias ExEffectiveBootstrap.Options
 
   def input(form, field, options \\ []) do
     opts = Options.input_options(form, field, options)
@@ -27,12 +27,12 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   defp valid_tag(_form, _field, false), do: []
   defp valid_tag(form, field, label) do
-    content_tag(:div, label || Feedback.valid(form, field), class: "valid-feedback")
+    content_tag(:div, label, class: "valid-feedback")
   end
 
   defp invalid_tag(_form, _field, false), do: []
   defp invalid_tag(form, field, label) do
-    content_tag(:div, label || Feedback.invalid(form, field), class: "invalid-feedback")
+    content_tag(:div, label, class: "invalid-feedback")
   end
 
 end
