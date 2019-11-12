@@ -20,9 +20,6 @@ defmodule ExEffectiveBootstrap.Feedback do
   end
 
   defp input_errors(form, field) do
-    IO.inspect("input errors for #{field}")
-    IO.inspect Keyword.get_values(form.source.errors, field)
-
     Keyword.get_values(form.source.errors, field)
     |> Enum.map(fn {msg, opts} -> error(msg, opts) end)
   end
