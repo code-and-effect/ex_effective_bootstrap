@@ -29,7 +29,7 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   defp valid_tag(_form, _field, false), do: []
   defp valid_tag(_form, _field, label) do
-    content_tag(:div, label || @valid_label, [class: "valid-feedback"])
+    content_tag(:div, label || @valid_label, class: "valid-feedback")
   end
 
   defp invalid_tag(_form, _field, false), do: []
@@ -38,7 +38,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     invalid_tag(form, field, invalid_label(errors))
   end
   defp invalid_tag(form, field, label) do
-    content_tag(:div, label, [class: "invalid-feedback"])
+    content_tag(:div, label, class: "invalid-feedback")
   end
 
   defp invalid_label(errors) when length(errors) == 0, do: @invalid_label
@@ -51,10 +51,10 @@ defmodule ExEffectiveBootstrap.Inputs do
   defp input_options(form, field, options) do
     %{
       label: options[:label],
-      type: (options[:as] || options[:type] || PhxForm.input_type(form, field)),
+      type: options[:as] || options[:type] || PhxForm.input_type(form, field),
       valid: options[:valid_feedback],
       invalid: options[:invalid_feedback],
-      wrapper: merge_options(options[:wrapper], [class: "form-group"]),
+      wrapper: merge_options(options[:wrapper], class: "form-group"),
       input: input_field_options(form, field, options)
     }
   end
@@ -88,8 +88,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp merge_class(options, nil, nil), do: options
-  defp merge_class(options, class, nil), do: Keyword.merge(options, [class: class])
-  defp merge_class(options, nil, class), do: Keyword.merge(options, [class: class])
-  defp merge_class(options, a, b), do: Keyword.merge(options, [class: "#{a} #{b}"])
-
+  defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
+  defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
+  defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
 end
