@@ -2,6 +2,20 @@ defmodule ExEffectiveBootstrap.Options do
   use Phoenix.HTML
   alias Phoenix.HTML.Form, as: PhxForm
 
+  def form_options(form_data, options \\ []) do
+    default = [
+      class: "effective-form needs-validation",
+      novalidate: true,
+      onsubmit: "return EffectiveForm.validate(this);"
+    ]
+
+    with_errors = with_errors_class(form)
+
+    default
+    |> merge(with_errors)
+    |> merge(options)
+  end
+
   def input_options(form, field, options) do
     %{
       label: options[:label],
@@ -13,39 +27,48 @@ defmodule ExEffectiveBootstrap.Options do
     }
   end
 
-  def input_field_type(form, field, options) do
-    options[:as] || options[:type] || PhxForm.input_type(form, field)
+  def merge(nil, opts) when is_list(opts), do: opts
+  def merge(options, nil) when is_list(options), do: options
+  def merge(options, opts) when is_list(options) and is_list(opts) do
+    Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
   end
 
-  defp wrapper_options(_, _, options) do
-    merge_options(options[:wrapper], class: "form-group")
+  def input_field_type(form, field, options) do
+    options[:type] || options[:as] || PhxForm.input_type(form, field)
+  end
+
+  defp wrapper_options(_form, _field, options) do
+    merge(options[:wrapper], class: "form-group")
   end
 
   defp input_field_options(form, field, options) do
     default = [class: "form-control"]
     options = Keyword.drop(options, [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper])
     validations = PhxForm.input_validations(form, field)
-    with_errors = with_errors_input_class(form, field)
+    with_errors = with_errors_class(form, field)
 
     default
-    |> merge_options(validations)
-    |> merge_options(with_errors)
-    |> merge_options(options)
+    |> merge(validations)
+    |> merge(with_errors)
+    |> merge(options)
   end
 
-  defp with_errors_input_class(form, field) do
+  defp with_errors_options(form) do
+    if with_errors?(form), do: [class: "with-errors"], else: []
+  end
+
+  defp with_errors_options(form, field) do
     cond do
-      form.source.valid? == true -> []
-      map_size(form.source.changes) == 0 -> []
+      !with_errors?(form) -> []
       form.source.errors[field] -> [class: "is-invalid"]
       true -> [class: "is-valid"]
     end
   end
 
-  defp merge_options(nil, opts) when is_list(opts), do: opts
-  defp merge_options(options, nil) when is_list(options), do: options
-  defp merge_options(options, opts) when is_list(options) and is_list(opts) do
-    Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
+  # submitted with errors
+  defp with_errors?(%Phoenix.HTML.Form{source: source}), do: with_errors?(source)
+  defp with_errors?(%Ecto.Changeset{} = source) do
+    !source.valid? && map_size(source.changes) > 0
   end
 
   defp merge_class(options, nil, nil), do: options
