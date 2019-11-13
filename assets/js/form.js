@@ -11,44 +11,53 @@ export default class EffectiveForm {
     return valid;
   }
 
-  // Private Methods
-
   submitting($form) {
-    console.log("its valid");
-
     $form.addClass('form-is-valid');
     $form.removeClass('form-is-invalid');
 
-    // this.spin($form);
+    this.spin($form);
+    this.disable($form);
 
-    // setTimeout(function() {
-    //   console.log("disabling...");
-    //   console.log($form);
-    //   EffectiveForm.disable($form)
-    // }, 0);
+    return true;
   }
 
   invalidate($form) {
-    console.log("its invalid");
-
     $form.addClass('was-validated');
     $form.addClass('form-is-invalid');
-
     //$form.find('.form-current-submit').removeClass('form-current-submit');
+
+    return true;
   }
 
   spin($form) {
-    console.log("spinning");
+    console.log("spin...")
+    return true;
   }
 
   disable($form) {
     $form.find('[type=submit]').prop('disabled', true);
-    console.log("disabled");
+    return true;
   }
 
   reset($form) {
-    if($form.hasClass('was-validated') != true) { return; }
-    console.log('resetting');
+    if($form.is('form') == false) { $form = $form.closest('form') };
+    if($form.hasClass('was-validated') == false) { return false; }
+
+    // Reset the form
+    $form.removeClass('was-validated');
+    $form.removeClass('form-is-invalid');
+    $form.removeClass('form-is-valid');
+
+    // Reset any individual input server side validations
+    $form.find('.alert.is-invalid').remove();
+    $form.find('.is-invalid').removeClass('is-invalid');
+    $form.find('.is-valid').removeClass('is-valid');
+
+    // Reset the submit button
+    //$form.find('.form-current-submit').removeClass('form-current-submit');
+    $form.find('[type=submit]').removeAttr('disabled');
+
+    return true;
   }
 
 }
