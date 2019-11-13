@@ -41,7 +41,6 @@ export default class EffectiveForm {
 
   reset($form) {
     if($form.is('form') == false) { $form = $form.closest('form') };
-    if($form.hasClass('was-validated') == false) { return false; }
 
     // Reset the form
     $form.removeClass('was-validated');

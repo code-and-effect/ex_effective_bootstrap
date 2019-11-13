@@ -8,18 +8,19 @@ defmodule ExEffectiveBootstrap.Feedback do
   def valid(_form, _field, _options), do: @valid
 
   def invalid(form, field, options) do
-    errors = input_errors(form, field)
-    feedback = input_feedback(form, field, options)
+    error = errors(form, field)
+    validation = validations(form, field, options)
+    feedback = feedbacks(form, field, options)
 
-    invalid_label(errors ++ feedback)
+    invalid_label(error ++ validation ++ feedback)
   end
 
-  defp invalid_label(errors) when length(errors) == 0, do: @invalid
-  defp invalid_label(errors) do
-    errors |> List.flatten |> Enum.uniq |> Enum.join(" and ")
+  defp invalid_label(messages) when length(messages) == 0, do: @invalid
+  defp invalid_label(messages) do
+    messages |> List.flatten |> Enum.uniq |> Enum.join(" and ")
   end
 
-  defp input_errors(form, field) do
+  defp errors(form, field) do
     Keyword.get_values(form.source.errors, field)
     |> Enum.map(fn {msg, opts} -> error(msg, opts) end)
   end
@@ -30,13 +31,23 @@ defmodule ExEffectiveBootstrap.Feedback do
     end)
   end
 
-  defp input_feedback(form, field, options) do
+  defp validations(form, field, _options) do
+    PhxForm.input_validations(form, field)
+    |> Enum.map(fn {msg, opts} -> validation(msg, opts) end)
+  end
+
+  defp validation(:required, true), do: ["can't be blank"]
+  defp validation(:minlength, count), do: ["should be at least #{count} character(s)"]
+  defp validation(:maxlength, _), do: []
+  defp validation(unknown, opts), do: ["unknown validation #{unknown} #{opts}"]
+
+  defp feedbacks(form, field, options) do
     input_type = options[:type] || options[:as] || PhxForm.input_type(form, field)
     feedback(input_type)
   end
 
   defp feedback(:email_input), do: ["must be an email"]
   defp feedback(:password_input), do: []
-  defp feedback(unknown), do: ["unknown #{IO.puts(unknown)}"]
+  defp feedback(unknown), do: ["unknown feedback #{unknown}"]
 
 end
