@@ -8,7 +8,7 @@ defmodule ExEffectiveBootstrap.Icons do
   def icon(svg, options \\ []) do
     options =
       options
-      |> Options.merge([class: "eb-icon eb-icon-#{svg}"])
+      |> Options.merge(class: "eb-icon eb-icon-#{svg}")
       |> Enum.map(fn {key, value} -> "#{key}='#{value}'" end)
       |> Enum.join(" ")
 
@@ -18,5 +18,4 @@ defmodule ExEffectiveBootstrap.Icons do
 
     {:safe, svg_tag}
   end
-
 end

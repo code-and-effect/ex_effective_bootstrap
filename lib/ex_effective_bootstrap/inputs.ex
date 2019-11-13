@@ -18,6 +18,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp label_tag(_form, _field, false), do: []
+
   defp label_tag(form, field, label) do
     Form.label(form, field, label || humanize(field))
   end
@@ -27,19 +28,21 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp valid_tag(_form, _field, false), do: []
+
   defp valid_tag(_form, _field, label) do
     content_tag(:div, label, class: "valid-feedback")
   end
 
   defp invalid_tag(_form, _field, false), do: []
+
   defp invalid_tag(_form, _field, label) do
     content_tag(:div, label, class: "invalid-feedback")
   end
 
   defp hint_tag(_form, _field, nil), do: []
+
   defp hint_tag(form, field, label) do
     options = [class: "form-text text-muted", id: "#{input_id(form, field)}_hint"]
     content_tag(:small, label, options)
   end
-
 end

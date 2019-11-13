@@ -15,8 +15,9 @@ defmodule ExEffectiveBootstrap.Feedback do
   end
 
   defp invalid_label(messages) when length(messages) == 0, do: @invalid
+
   defp invalid_label(messages) do
-    messages |> List.flatten |> Enum.uniq |> Enum.join(" and ")
+    messages |> List.flatten() |> Enum.uniq() |> Enum.join(" and ")
   end
 
   defp errors(form, field) do
@@ -25,7 +26,7 @@ defmodule ExEffectiveBootstrap.Feedback do
   end
 
   defp error(msg, opts) do
-    Enum.reduce(opts, msg, fn({key, value}, acc) ->
+    Enum.reduce(opts, msg, fn {key, value}, acc ->
       if is_nil(value), do: acc, else: String.replace(acc, "%{#{key}}", "#{value}")
     end)
   end
@@ -48,5 +49,4 @@ defmodule ExEffectiveBootstrap.Feedback do
   defp feedback(:email_input), do: ["must be an email"]
   defp feedback(:password_input), do: []
   defp feedback(unknown), do: ["unknown feedback #{unknown}"]
-
 end

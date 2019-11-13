@@ -30,6 +30,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   def merge(nil, opts) when is_list(opts), do: opts
   def merge(options, nil) when is_list(options), do: options
+
   def merge(options, opts) when is_list(options) and is_list(opts) do
     Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
   end
@@ -46,10 +47,12 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp input_opts(form, field, options) do
     default = [class: "form-control"]
+    drop = [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint]
+
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors_opts(form, field)
     with_hint = input_with_hint_opts(form, field, options)
-    options = Keyword.drop(options, [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint])
+    options = Keyword.drop(options, drop)
 
     default
     |> merge(validations)
@@ -82,6 +85,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   # submitted with errors
   defp with_errors?(%Phoenix.HTML.Form{source: source}), do: with_errors?(source)
+
   defp with_errors?(%Ecto.Changeset{} = source) do
     !source.valid? && map_size(source.changes) > 0
   end
@@ -90,5 +94,4 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
-
 end
