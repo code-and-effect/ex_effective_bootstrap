@@ -1,6 +1,5 @@
 defmodule ExEffectiveBootstrap.Form do
   use Phoenix.HTML
-  alias Ecto.Changeset
   alias ExEffectiveBootstrap.Options
 
   @spec effective_form_for(Phoenix.HTML.FormData.t(), String.t()) :: Phoenix.HTML.Form.t()

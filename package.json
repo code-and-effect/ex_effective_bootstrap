@@ -2,7 +2,7 @@
   "name": "ex_effective_bootstrap",
   "version": "0.1.0",
   "description": "ExEffectiveBootstrap Javascript",
-  "author": "Code and Effect",
+  "author": "Code and Effect Inc.",
   "license": "MIT",
   "main": "./priv/static/ex_effective_bootstrap.js",
   "repository": {
@@ -17,6 +17,7 @@
   "files": [
     "README.md",
     "package.json",
-    "priv/static/ex_effective_bootstrap.js"
+    "priv/static/ex_effective_bootstrap.js",
+    "priv/static/ex_effective_bootstrap.css"
   ]
 }

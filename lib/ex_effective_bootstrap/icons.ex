@@ -1,5 +1,4 @@
 defmodule ExEffectiveBootstrap.Icons do
-  use Phoenix.HTML
   alias ExEffectiveBootstrap.Options
 
   @svg_path "deps/ex_effective_bootstrap/priv/icons"
@@ -16,8 +15,6 @@ defmodule ExEffectiveBootstrap.Icons do
     svg_tag =
       File.read!("#{@svg_path}/#{svg}.svg")
       |> String.replace("svg", "svg #{options}", global: false)
-
-    IO.inspect(svg_tag)
 
     {:safe, svg_tag}
   end

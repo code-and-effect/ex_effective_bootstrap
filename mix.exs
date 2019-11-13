@@ -12,10 +12,10 @@ defmodule ExEffectiveBootstrap.MixProject do
       start_permanent: Mix.env() == :prod,
       compilers: [:phoenix] ++ Mix.compilers(),
       deps: deps(),
-
-      # Hex
-      description:
-        "Everything your Phoenix Elixir app needs to get working with Twitter Bootstrap 4"
+      package: package(),
+      source_url: "https://github.com/code-and-effect/ex_effective_bootstrap",
+      name: "ExEffectiveBootstrap",
+      description: "Everything your Phoenix Elixir app needs to use Twitter Bootstrap 4"
     ]
   end
 
@@ -31,6 +31,15 @@ defmodule ExEffectiveBootstrap.MixProject do
     [
       {:phoenix, "~> 1.3.0 or ~> 1.4.0"},
       {:phoenix_html, "~> 2.11"}
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Code and Effect Inc."],
+      licenses: ["MIT"],
+      files: ~w(lib priv mix.exs package.json LICENSE.md README.md),
+      links: %{github: "https://github.com/code-and-effect/ex_effective_bootstrap"}
     ]
   end
 

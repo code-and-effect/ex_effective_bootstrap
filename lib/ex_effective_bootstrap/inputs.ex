@@ -27,18 +27,19 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp valid_tag(_form, _field, false), do: []
-  defp valid_tag(form, field, label) do
+  defp valid_tag(_form, _field, label) do
     content_tag(:div, label, class: "valid-feedback")
   end
 
   defp invalid_tag(_form, _field, false), do: []
-  defp invalid_tag(form, field, label) do
+  defp invalid_tag(_form, _field, label) do
     content_tag(:div, label, class: "invalid-feedback")
   end
 
   defp hint_tag(_form, _field, nil), do: []
   defp hint_tag(form, field, label) do
-    content_tag(:small, label, id: "#{input_id(form, field)}_hint", class: "form-text text-muted")
+    options = [class: "form-text text-muted", id: "#{input_id(form, field)}_hint"]
+    content_tag(:small, label, options)
   end
 
 end
