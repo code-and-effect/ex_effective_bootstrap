@@ -1,7 +1,6 @@
 defmodule ExEffectiveBootstrap.Options do
-  use Phoenix.HTML
-  alias Phoenix.HTML.Form, as: PhxForm
   alias ExEffectiveBootstrap.Feedback
+  alias Phoenix.HTML.Form
 
   def form_options(form, options \\ []) do
     default = [
@@ -36,7 +35,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp type_opts(form, field, options) do
-    options[:type] || options[:as] || PhxForm.input_type(form, field)
+    options[:type] || options[:as] || Form.input_type(form, field)
   end
 
   defp wrapper_opts(_form, _field, options) do
@@ -47,7 +46,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp input_opts(form, field, options) do
     default = [class: "form-control"]
-    validations = PhxForm.input_validations(form, field)
+    validations = Form.input_validations(form, field)
     with_errors = input_with_errors_opts(form, field)
     with_hint = input_with_hint_opts(form, field, options)
     options = Keyword.drop(options, [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint])
@@ -68,7 +67,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp input_with_hint_opts(form, field, options) do
-    if options[:hint], do: ["aria-describedby": "#{input_id(form, field)}_hint"], else: []
+    if options[:hint], do: ["aria-describedby": "#{Form.input_id(form, field)}_hint"], else: []
   end
 
   defp valid_feedback_opts(form, field, options) do

@@ -1,6 +1,5 @@
 defmodule ExEffectiveBootstrap.Feedback do
-  use Phoenix.HTML
-  alias Phoenix.HTML.Form, as: PhxForm
+  alias Phoenix.HTML.Form
 
   @valid "Look's good!"
   @invalid "is invalid"
@@ -27,12 +26,12 @@ defmodule ExEffectiveBootstrap.Feedback do
 
   defp error(msg, opts) do
     Enum.reduce(opts, msg, fn({key, value}, acc) ->
-      if is_nil(value), do: acc, else: String.replace(acc, "%{#{key}}", to_string(value))
+      if is_nil(value), do: acc, else: String.replace(acc, "%{#{key}}", "#{value}")
     end)
   end
 
   defp validations(form, field, _options) do
-    PhxForm.input_validations(form, field)
+    Form.input_validations(form, field)
     |> Enum.map(fn {msg, opts} -> validation(msg, opts) end)
   end
 
@@ -42,7 +41,7 @@ defmodule ExEffectiveBootstrap.Feedback do
   defp validation(unknown, opts), do: ["unknown validation #{unknown} #{opts}"]
 
   defp feedbacks(form, field, options) do
-    input_type = options[:type] || options[:as] || PhxForm.input_type(form, field)
+    input_type = options[:type] || options[:as] || Form.input_type(form, field)
     feedback(input_type)
   end
 

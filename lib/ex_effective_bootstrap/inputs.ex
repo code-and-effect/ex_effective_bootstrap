@@ -1,7 +1,7 @@
 defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
-  alias Phoenix.HTML.Form, as: PhxForm
   alias ExEffectiveBootstrap.Options
+  alias Phoenix.HTML.Form
 
   def input(form, field, options \\ []) do
     opts = Options.input_options(form, field, options)
@@ -19,11 +19,11 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   defp label_tag(_form, _field, false), do: []
   defp label_tag(form, field, label) do
-    PhxForm.label(form, field, label || humanize(field))
+    Form.label(form, field, label || humanize(field))
   end
 
   defp input_tag(form, field, type, options) do
-    apply(PhxForm, type, [form, field, options])
+    apply(Form, type, [form, field, options])
   end
 
   defp valid_tag(_form, _field, false), do: []
