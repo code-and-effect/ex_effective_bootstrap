@@ -1,0 +1,67 @@
+.eb-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.eb-icon.big-1 {
+  width: (1.6rem * 1.25);
+  height: (1.6rem * 1.25);
+}
+
+.eb-icon.big-2 {
+  width: (1.6rem * 1.5);
+  height: (1.6rem * 1.5);
+}
+
+.eb-icon.big-3 {
+  width: (1.6rem * 2.0);
+  height: (1.6rem * 2.0);
+}
+
+.eb-icon.big-4 {
+  width: (1.6rem * 4.0);
+  height: (1.6rem * 4.0);
+}
+
+.eb-icon.small-1 {
+  width: (1.6rem * 0.75);
+  height: (1.6rem * 0.75);
+}
+
+.eb-icon.small-2 {
+  width: (1.6rem * 0.5);
+  height: (1.6rem * 0.5);
+}
+
+.eb-icon.small-3 {
+  width: (1.6rem * 0.25);
+  height: (1.6rem * 0.25);
+}
+
+.eb-icon.small-4 {
+  width: (1.6rem * 0.125);
+  height: (1.6rem * 0.125);
+}
+
+.input-group-text {
+  .eb-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.eb-icon-spinner {
+  animation: spin 1.5s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% { -moz-transform: rotate(360deg); }
+}
+
+@-webkit-keyframes spin {
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
