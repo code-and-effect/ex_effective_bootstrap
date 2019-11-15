@@ -28,7 +28,7 @@ defmodule ExEffectiveBootstrap.Submit do
 
   def effective_submit(value \\ "Save", opts \\ []) do
     defaults = [
-      class: "effective-form-actions",
+      class: "effective-submit",
       onclick: "return EffectiveForm.onSubmitClick(this);"
     ]
 

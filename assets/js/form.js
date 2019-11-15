@@ -23,9 +23,8 @@ export default class EffectiveForm {
     $form.addClass('form-is-valid');
     $form.removeClass('form-is-invalid');
 
-    this.spin($form);
     this.disable($form);
-
+    this.flashSuccess();
     return true;
   }
 
@@ -34,8 +33,7 @@ export default class EffectiveForm {
     $form.addClass('form-is-invalid');
     $form.find('.effective-current-submit').removeClass('.effective-current-submit');
 
-    this.flashInvalid();
-
+    this.flashError();
     return true;
   }
 
@@ -69,14 +67,26 @@ export default class EffectiveForm {
     return true;
   }
 
-  // flashIcon(name) {
-  //   this.currentSubmit.find('.eb-icon-' + name).show();
-  // }
-
-  flashInvalid() {
-    if(this.currentSubmit.length == 0) { return false; }
-    this.currentSubmit.find('.eb-icon-times').show().delay(1000).fadeOut('slow')
+  flashSuccess() {
+    this.flash('check', 1000, function () { window.EffectiveForm.flashSpin(); })
   }
+
+  flashError() { this.flash('times', 1000) }
+  flashSpin() { this.flash('spinner', 5000) }
+
+  flash(name, delay = 1000, fun) {
+    if (this.currentSubmit.length == 0) { return false; }
+
+    return this.currentSubmit
+      .addClass('effective-current-submit')
+      .find('.eb-icon-' + name).show()
+      .delay(delay)
+      .fadeOut('slow', function () {
+        $('.effective-current-submit').removeClass('effective-current-submit');
+        if(fun) { fun(); }
+      });
+  }
+
 
 }
 
