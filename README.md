@@ -91,3 +91,6 @@ npm run start
   <%= submit "Sign in", class: "btn-form btn-block" %>
 </form>
 ```
+
+
+https://fontawesome.com/icons?d=gallery&s=solid
