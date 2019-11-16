@@ -8,18 +8,31 @@ defmodule ExEffectiveBootstrap.Inputs do
     effective_input(type, form, field, opts)
   end
 
-  def effective_input(:checkbox, form, field, options) do
-    opts = Options.input_options(form, field, options)
+  def effective_input(:checkbox, form, field, opts) do
+   options = %Options{
+      wrapper: [class: "form-group custom-control custom-checkbox"],
+      label: [class: "custom-control-label"],
+      input: [class: "custom-control-input"],
+    } |> Options.build(form, field, opts)
 
-    content_tag :div, class: "form-group custom-control custom-checkbox" do
-      label = label_tag(form, field, opts.label, class: "custom-control-label")
-      input = input_tag(form, field, :checkbox, class: "custom-control-input")
-      valid = valid_tag(form, field, opts.valid)
-      invalid = invalid_tag(form, field, opts.invalid)
-      hint = hint_tag(form, field, opts.hint)
+    IO.inspect(options)
 
-      [input, label, valid, invalid, hint]
-    end
+    "CHECKBOX"
+
+    # |> Options.input_options(form, field, options)
+
+
+    # opts = Options.input_options(form, field, options)
+
+    # content_tag :div, class: "form-group custom-control custom-checkbox" do
+    #   label = label_tag(form, field, opts.label, class: "custom-control-label")
+    #   input = input_tag(form, field, :checkbox, class: "custom-control-input")
+    #   valid = valid_tag(form, field, opts.valid)
+    #   invalid = invalid_tag(form, field, opts.invalid)
+    #   hint = hint_tag(form, field, opts.hint)
+
+    #   [input, label, valid, invalid, hint]
+    # end
   end
 
   def effective_input(:email, form, field, options) do

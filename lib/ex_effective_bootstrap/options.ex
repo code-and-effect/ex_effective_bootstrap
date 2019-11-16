@@ -2,6 +2,15 @@ defmodule ExEffectiveBootstrap.Options do
   alias ExEffectiveBootstrap.Feedback
   alias Phoenix.HTML.Form
 
+  defstruct wrapper: [class: "form-group"],
+            label: [],
+            input: [class: "form-control"],
+            valid: [class: "valid-feedback"],
+            invalid: [class: "invalid-feedback"],
+            hint: [class: "form-text text-muted"],
+            prepend: [class: "input-group-prepend"],
+            append: [class: "input-group-append"]
+
   def form_options(form, options \\ []) do
     default = [
       class: "effective-form needs-validation",
@@ -15,6 +24,58 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(with_errors)
     |> merge(options)
   end
+
+  def build(options, form, field, opts \\ []) do
+    %__MODULE__{
+      wrapper: build_wrapper(form, field, options.wrapper, opts[:wrapper]),
+      label: build_label(form, field, options.label, opts[:label]),
+      valid: build_valid(form, field, options.valid, opts[:valid_feedback]),
+      invalid: build_invalid(form, field, options.valid, opts[:invalid_feedback]),
+      hint: build_hint(form, field, options.hint, opts[:hint]),
+      input: build_input(form, field, options.input, opts)
+    }
+  end
+
+  defp build_wrapper(form, field, options, opts), do: merge(options, opts)
+
+  defp build_label(form, field, options, opts) when is_list(opts) do
+    options = merge(options, opts)
+    options |> Keyword.put_new(:text, Form.humanize(field))
+  end
+
+  defp build_label(form, field, options, opts), do: merge(options, [text: opts])
+
+  defp build_hint(form, field, options, opts) when is_list(opts), do: merge(options, opts)
+  defp build_hint(form, field, options, opts), do: merge(options, [text: opts])
+
+  defp build_valid(form, field, options, opts) when is_list(opts) do
+    options = merge(options, opts)
+    options |> Keyword.put_new(:text, Feedback.valid(form, field, options))
+  end
+
+  defp build_valid(form, field, options, opts), do: merge(options, [text: opts])
+
+  defp build_invalid(form, field, options, opts) when is_list(opts) do
+    options = merge(options, opts)
+    options |> Keyword.put_new(:text, Feedback.invalid(form, field, options))
+  end
+
+  defp build_invalid(form, field, options, opts), do: merge(options, [text: opts])
+
+  defp build_input(form, field, options, opts) do
+    drop = [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
+
+    validations = Form.input_validations(form, field)
+    with_errors = input_with_errors_opts(form, field)
+    with_hint = input_with_hint_opts(form, field, opts)
+
+    Keyword.drop(opts, drop)
+    |> merge(validations)
+    |> merge(with_errors)
+    |> merge(with_hint)
+    |> merge(options)
+  end
+
 
   def input_options(form, field, options) do
     %{
