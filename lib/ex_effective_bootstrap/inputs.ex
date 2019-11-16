@@ -73,7 +73,7 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   def effective_input(:email_input, form, field, opts) do
     options = %Options{
-      prepend: [text: "@", class: "input-group-prepend"]
+      prepend: [text: "@", class: "input-group-text"]
     } |> Options.build(form, field, opts)
 
     tags = build(:email_input, form, field, options)

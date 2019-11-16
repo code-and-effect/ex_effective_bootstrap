@@ -8,8 +8,8 @@ defmodule ExEffectiveBootstrap.Options do
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
             hint: [class: "form-text text-muted"],
-            prepend: [class: "input-group-prepend"],
-            append: [class: "input-group-append"]
+            prepend: [class: "input-group-text"],
+            append: [class: "input-group-text"]
 
   def form_options(form, options \\ []) do
     default = [
@@ -59,7 +59,7 @@ defmodule ExEffectiveBootstrap.Options do
     build_hint(form, field, options, [text: opts])
   end
 
-  defp build_prepend(form, field, options, opts) when is_list(opts) do
+  defp build_prepend(form, field, options, opts) when is_list(opts) or is_nil(opts) do
     IO.inspect("AAA")
     merge(options, opts)
   end
