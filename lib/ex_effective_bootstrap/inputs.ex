@@ -3,12 +3,53 @@ defmodule ExEffectiveBootstrap.Inputs do
   alias ExEffectiveBootstrap.Options
   alias Phoenix.HTML.Form
 
-  def input(form, field, options \\ []) do
+  def input(form, field, opts \\ []) do
+    type = opts[:type] || opts[:as] || Form.input_type(form, field)
+    effective_input(type, form, field, opts)
+  end
+
+  def effective_input(:checkbox, form, field, options) do
+    opts = Options.input_options(form, field, options)
+
+    content_tag :div, class: "form-group custom-control custom-checkbox" do
+      label = label_tag(form, field, opts.label, class: "custom-control-label")
+      input = input_tag(form, field, :checkbox, class: "custom-control-input")
+      valid = valid_tag(form, field, opts.valid)
+      invalid = invalid_tag(form, field, opts.invalid)
+      hint = hint_tag(form, field, opts.hint)
+
+      [input, label, valid, invalid, hint]
+    end
+  end
+
+  def effective_input(:email, form, field, options) do
+    opts = Options.input_options(form, field, options)
+
+    prepend = content_tag(:div, class: "input-group-prepend") do
+      content_tag(:span, "@", class: "input-group-text")
+    end
+
+    label = label_tag(form, field, opts.label)
+    input = input_tag(form, field, :email_input, opts.input)
+    valid = valid_tag(form, field, opts.valid)
+    invalid = invalid_tag(form, field, opts.invalid)
+    hint = hint_tag(form, field, opts.hint)
+
+    group = content_tag(:div, class: "input-group") do
+      [prepend, input, valid, invalid]
+    end
+
+    content_tag :div, opts.wrapper do
+      [label, group, hint]
+    end
+  end
+
+  def effective_input(type, form, field, options) do
     opts = Options.input_options(form, field, options)
 
     content_tag :div, opts.wrapper do
       label = label_tag(form, field, opts.label)
-      input = input_tag(form, field, opts.type, opts.input)
+      input = input_tag(form, field, type, opts.input)
       valid = valid_tag(form, field, opts.valid)
       invalid = invalid_tag(form, field, opts.invalid)
       hint = hint_tag(form, field, opts.hint)
@@ -19,8 +60,8 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   defp label_tag(_form, _field, false), do: []
 
-  defp label_tag(form, field, label) do
-    Form.label(form, field, label || humanize(field))
+  defp label_tag(form, field, label, opts \\ []) do
+    Form.label(form, field, label || humanize(field), opts)
   end
 
   defp input_tag(form, field, type, options) do
