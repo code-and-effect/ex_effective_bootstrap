@@ -33,79 +33,80 @@ defmodule ExEffectiveBootstrap.Options do
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     %__MODULE__{
       type: input_type(form, field, opts),
-      wrapper: wrapper(form, field, options.wrapper, opts[:wrapper]),
-      label: label(form, field, options.label, opts[:label]),
-      input: input(form, field, options.input, opts),
-      valid: valid(form, field, options.valid, opts[:valid_feedback]),
-      invalid: invalid(form, field, options.invalid, opts[:invalid_feedback]),
-      hint: hint(form, field, options.hint, opts[:hint]),
-      prepend: prepend(form, field, options.prepend, opts[:prepend]),
-      append: append(form, field, options.append, opts[:append]),
+      wrapper: wrapper(options.wrapper, opts[:wrapper], form, field),
+      label: label(options.label, opts[:label], form, field),
+      input: input(options.input, opts, form, field),
+      valid: valid(options.valid, opts[:valid_feedback], form, field),
+      invalid: invalid(options.invalid, opts[:invalid_feedback], form, field),
+      hint: hint(options.hint, opts[:hint], form, field),
+      prepend: prepend(options.prepend, opts[:prepend], form, field),
+      append: append(options.append, opts[:append], form, field),
     }
   end
 
+  @spec merge(nil | maybe_improper_list, nil | maybe_improper_list) :: maybe_improper_list
   def merge(nil, opts) when is_list(opts), do: opts
   def merge(options, nil) when is_list(options), do: options
   def merge(options, opts) when is_list(options) and is_list(opts) do
     Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
   end
 
-  defp wrapper(form, field, options, opts), do: merge(options, opts)
+  defp wrapper(options, opts, form, field), do: merge(options, opts)
 
-  defp label(form, field, options, opts) when is_list(opts) do
+  defp label(options, opts, form, field) when is_list(opts) do
     merge(options, opts)
     |> put_blank(:text, Form.humanize(field))
     |> put_blank(:for, Form.input_id(form, field))
   end
 
-  defp label(form, field, options, opts) do
-    label(form, field, options, [text: opts])
+  defp label(options, opts, form, field) do
+    label(options, [text: opts], form, field)
   end
 
-  defp hint(form, field, options, opts) when is_list(opts) do
+  defp hint(options, opts, form, field) when is_list(opts) do
     merge(options, opts)
     |> put_blank(:id, "#{Form.input_id(form, field)}_hint")
   end
 
-  defp hint(form, field, options, opts) do
-    hint(form, field, options, [text: opts])
+  defp hint(options, opts, form, field) do
+    hint(options, [text: opts], form, field)
   end
 
-  defp prepend(form, field, options, opts) when is_list(opts) or is_nil(opts) do
+  defp prepend(options, opts, form, field) when is_list(opts) or is_nil(opts) do
     merge(options, opts)
   end
 
-  defp prepend(form, field, options, opts) do
-    prepend(form, field, options, [text: opts])
+  defp prepend(options, opts, form, field) do
+    prepend(options, [text: opts], form, field)
   end
 
-  defp append(form, field, options, opts) when is_list(opts) or is_nil(opts) do
+  defp append(options, opts, form, field) when is_list(opts) or is_nil(opts) do
     merge(options, opts)
   end
 
-  defp append(form, field, options, opts) do
-    append(form, field, options, [text: opts])
+  defp append(options, opts, form, field) do
+    append(options, [text: opts], form, field)
   end
 
-  defp valid(form, field, options, opts) when is_list(opts) do
+  defp valid(options, opts, form, field) when is_list(opts) do
     merge(options, opts)
     |> put_blank(:text, Feedback.valid(form, field, options))
   end
 
-  defp valid(form, field, options, opts) do
-    valid(form, field, options, [text: opts])
+  defp valid(options, opts, form, field) do
+    valid(options, [text: opts], form, field)
   end
 
-  defp invalid(form, field, options, opts) when is_list(opts) do
+  defp invalid(options, opts, form, field) when is_list(opts) do
     merge(options, opts)
     |> put_blank(:text, Feedback.invalid(form, field, options))
   end
 
-  defp invalid(form, field, options, opts) do
-    invalid(form, field, options, [text: opts])
+  defp invalid(options, opts, form, field) do
+    invalid(options, [text: opts], form, field)
   end
 
-  defp input(form, field, options, opts) do
+  defp input(options, opts, form, field) do
     drop = [:label, :as, :input, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
 
     merged_opts = merge(opts[:input], Keyword.drop(opts, drop))

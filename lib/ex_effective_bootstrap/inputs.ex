@@ -42,7 +42,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     } |> to_html(form, field, opts)
    end
 
-  defp effective_input(type, form, field, opts) do
+  defp effective_input(_, form, field, opts) do
     %Options{} |> to_html(form, field, opts)
   end
 
