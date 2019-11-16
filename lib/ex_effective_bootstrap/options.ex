@@ -2,7 +2,8 @@ defmodule ExEffectiveBootstrap.Options do
   alias ExEffectiveBootstrap.Feedback
   alias Phoenix.HTML.Form
 
-  defstruct wrapper: [class: "form-group"],
+  defstruct type: nil,
+            wrapper: [class: "form-group"],
             label: [for: nil],
             input: [class: "form-control"],
             valid: [class: "valid-feedback"],
@@ -25,8 +26,13 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(options)
   end
 
+  def input_type(form, field, opts) do
+    opts[:type] || opts[:as] || Form.input_type(form, field)
+  end
+
   def build(options, form, field, opts \\ []) do
     %__MODULE__{
+      type: input_type(form, field, opts),
       wrapper: build_wrapper(form, field, options.wrapper, opts[:wrapper]),
       label: build_label(form, field, options.label, opts[:label]),
       valid: build_valid(form, field, options.valid, opts[:valid_feedback]),
