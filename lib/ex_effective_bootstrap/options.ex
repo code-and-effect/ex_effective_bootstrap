@@ -3,7 +3,7 @@ defmodule ExEffectiveBootstrap.Options do
   alias Phoenix.HTML.Form
 
   defstruct wrapper: [class: "form-group"],
-            label: [],
+            label: [for: nil],
             input: [class: "form-control"],
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
