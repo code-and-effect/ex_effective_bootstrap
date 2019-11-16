@@ -11,56 +11,52 @@ defmodule ExEffectiveBootstrap.Tags do
             prepend: nil,
             append: nil
 
-  def build(type, form, field, %Options{} = options) do
+  def build(form, field, %Options{} = options) do
     %__MODULE__{
-      label: label_tag(options.label),
-      input: input_tag(type, form, field, options.input),
-      valid: valid_tag(options.valid),
-      invalid: invalid_tag(options.invalid),
-      hint: hint_tag(options.hint),
-      prepend: prepend_tag(options.prepend),
-      append: append_tag(options.append)
+      label: label(options.label) || [],
+      input: input(form, field, options) || [],
+      valid: valid(options.valid) || [],
+      invalid: invalid(options.invalid) || [],
+      hint: hint(options.hint) || [],
+      prepend: prepend(options.prepend) || [],
+      append: append(options.append) || [],
     }
   end
 
-  defp label_tag(opts) do
-    if opts[:text], do: content_tag(:label, opts[:text], Keyword.delete(opts, :text)), else: []
+  defp label(options) do
+    if options[:text], do: content_tag(:label, options[:text], Keyword.delete(options, :text))
   end
 
-  defp valid_tag(opts) do
-    if opts[:text], do: content_tag(:div, opts[:text], Keyword.delete(opts, :text)), else: []
+  defp input(form, field, options) do
+    apply(Form, options.type, [form, field, options.input])
   end
 
-  defp invalid_tag(opts) do
-    if opts[:text], do: content_tag(:div, opts[:text], Keyword.delete(opts, :text)), else: []
+  defp valid(options) do
+    if options[:text], do: content_tag(:div, options[:text], Keyword.delete(options, :text))
   end
 
-  defp hint_tag(opts) do
-    if opts[:text], do: content_tag(:small, opts[:text], Keyword.delete(opts, :text)), else: []
+  defp invalid(options) do
+    if options[:text], do: content_tag(:div, options[:text], Keyword.delete(options, :text))
   end
 
-  defp prepend_tag(opts) do
-    if opts[:text] do
+  defp hint(options) do
+    if options[:text], do: content_tag(:small, options[:text], Keyword.delete(options, :text))
+  end
+
+  defp prepend(options) do
+    if options[:text] do
       content_tag(:div, class: "input-group-prepend") do
-        content_tag(:span, opts[:text], Keyword.delete(opts, :text))
+        content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
-    else
-      []
     end
   end
 
-  defp append_tag(opts) do
-    if opts[:text] do
+  defp append(options) do
+    if options[:text] do
       content_tag(:div, class: "input-group-append") do
-        content_tag(:span, opts[:text], Keyword.delete(opts, :text))
+        content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
-    else
-      []
     end
-  end
-
-  defp input_tag(type, form, field, opts) do
-    apply(Form, type, [form, field, opts])
   end
 
 end

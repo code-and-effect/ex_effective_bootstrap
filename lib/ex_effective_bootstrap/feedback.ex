@@ -11,12 +11,12 @@ defmodule ExEffectiveBootstrap.Feedback do
     validation = validations(form, field, options)
     feedback = feedbacks(form, field, options)
 
-    invalid_label(error ++ validation ++ feedback)
+    invalid_text(error ++ validation ++ feedback)
   end
 
-  defp invalid_label(messages) when length(messages) == 0, do: @invalid
+  defp invalid_text(messages) when length(messages) == 0, do: @invalid
 
-  defp invalid_label(messages) do
+  defp invalid_text(messages) do
     messages |> List.flatten() |> Enum.uniq() |> Enum.join(" and ")
   end
 

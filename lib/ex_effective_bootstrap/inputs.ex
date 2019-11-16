@@ -8,13 +8,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     |> effective_input(form, field, opts)
   end
 
-  def build(form, field, opts, %Options{} = options) do
-    options = Options.build(options, form, field, opts)
-    tags = Tags.build(options.type, form, field, options)
-    {options, tags}
-  end
-
-  def effective_input(:checkbox, form, field, opts) do
+  defp effective_input(:checkbox, form, field, opts) do
    {options, tags} = build(form, field, opts, %Options{
       wrapper: [class: "form-group custom-control custom-checkbox"],
       label: [class: "custom-control-label"],
@@ -26,7 +20,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     end
   end
 
-  def effective_input(:email_input, form, field, opts) do
+  defp effective_input(:email_input, form, field, opts) do
     {options, tags} = build(form, field, opts, %Options{
       prepend: [text: "@", class: "input-group-text"]
     })
@@ -40,12 +34,18 @@ defmodule ExEffectiveBootstrap.Inputs do
     end
   end
 
-  def effective_input(type, form, field, opts) do
+  defp effective_input(type, form, field, opts) do
     {options, tags} = build(form, field, opts, %Options{})
 
     content_tag :div, options.wrapper do
       [tags.label, tags.input, tags.valid, tags.invalid, tags.hint]
     end
+  end
+
+  defp build(form, field, opts, %Options{} = options) do
+    options = Options.build(form, field, options, opts)
+    tags = Tags.build(form, field, options)
+    {options, tags}
   end
 
 end
