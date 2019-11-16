@@ -22,6 +22,7 @@ defmodule ExEffectiveBootstrap.Inputs do
       valid: valid_tag(options.valid),
       invalid: invalid_tag(options.invalid),
       hint: hint_tag(options.hint),
+      prepend: prepend_tag(options.prepend),
       input: input_tag(type, form, field, options.input)
     }
   end
@@ -42,6 +43,16 @@ defmodule ExEffectiveBootstrap.Inputs do
     if opts[:text], do: content_tag(:small, opts[:text], Keyword.delete(opts, :text)), else: []
   end
 
+  defp prepend_tag(opts) do
+    if opts[:text] do
+      content_tag(:div, class: "input-group-prepend") do
+        content_tag(:span, opts[:text], Keyword.delete(opts, :text))
+      end
+    else
+      []
+    end
+  end
+
   defp input_tag(type, form, field, opts) do
     apply(Form, type, [form, field, opts])
   end
@@ -54,47 +65,55 @@ defmodule ExEffectiveBootstrap.Inputs do
     } |> Options.build(form, field, opts)
 
     tags = build(:checkbox, form, field, options)
-    IO.inspect(tags)
 
     content_tag :div, options.wrapper do
       [tags.input, tags.label, tags.valid, tags.invalid, tags.hint]
     end
+  end
 
+  def effective_input(:email_input, form, field, opts) do
+    options = %Options{
+      prepend: [text: "@", class: "input-group-prepend"]
+    } |> Options.build(form, field, opts)
 
-    # content_tag :div, class: "form-group custom-control custom-checkbox" do
-    #   label = label_tag(form, field, opts.label, class: "custom-control-label")
-    #   input = input_tag(form, field, :checkbox, class: "custom-control-input")
-    #   valid = valid_tag(form, field, opts.valid)
-    #   invalid = invalid_tag(form, field, opts.invalid)
-    #   hint = hint_tag(form, field, opts.hint)
+    tags = build(:email_input, form, field, options)
 
-    #   [input, label, valid, invalid, hint]
+    IO.inspect("IN EMAIL INPUT")
+    IO.inspect(options)
+    IO.inspect(tags)
+
+    group = content_tag(:div, class: "input-group") do
+      [tags.prepend, tags.input, tags.valid, tags.invalid]
+    end
+
+    content_tag :div, options.wrapper do
+      [tags.label, group, tags.hint]
+    end
+
+    # opts = Options.input_options(form, field, options)
+
+    # prepend = content_tag(:div, class: "input-group-prepend") do
+    #   content_tag(:span, "@", class: "input-group-text")
+    # end
+
+    # label = label_tag(form, field, opts.label)
+    # input = input_tag(form, field, :email_input, opts.input)
+    # valid = valid_tag(form, field, opts.valid)
+    # invalid = invalid_tag(form, field, opts.invalid)
+    # hint = hint_tag(form, field, opts.hint)
+
+    # group = content_tag(:div, class: "input-group") do
+    #   [prepend, input, valid, invalid]
+    # end
+
+    # content_tag :div, opts.wrapper do
+    #   [label, group, hint]
     # end
   end
 
-  # def effective_input(:email, form, field, options) do
-  #   opts = Options.input_options(form, field, options)
-
-  #   prepend = content_tag(:div, class: "input-group-prepend") do
-  #     content_tag(:span, "@", class: "input-group-text")
-  #   end
-
-  #   label = label_tag(form, field, opts.label)
-  #   input = input_tag(form, field, :email_input, opts.input)
-  #   valid = valid_tag(form, field, opts.valid)
-  #   invalid = invalid_tag(form, field, opts.invalid)
-  #   hint = hint_tag(form, field, opts.hint)
-
-  #   group = content_tag(:div, class: "input-group") do
-  #     [prepend, input, valid, invalid]
-  #   end
-
-  #   content_tag :div, opts.wrapper do
-  #     [label, group, hint]
-  #   end
-  # end
-
   def effective_input(type, form, field, opts) do
+    IO.inspect(type)
+
     options = Options.build(%Options{}, form, field, opts)
     tags = build(type, form, field, options)
 

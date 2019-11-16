@@ -60,10 +60,13 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp build_prepend(form, field, options, opts) when is_list(opts) do
+    IO.inspect("AAA")
     merge(options, opts)
   end
 
   defp build_prepend(form, field, options, opts) do
+    IO.inspect("BBB")
+    IO.inspect(opts)
     build_prepend(form, field, options, [text: opts])
   end
 
