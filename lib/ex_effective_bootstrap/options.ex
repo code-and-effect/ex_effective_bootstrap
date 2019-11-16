@@ -30,8 +30,10 @@ defmodule ExEffectiveBootstrap.Options do
       wrapper: build_wrapper(form, field, options.wrapper, opts[:wrapper]),
       label: build_label(form, field, options.label, opts[:label]),
       valid: build_valid(form, field, options.valid, opts[:valid_feedback]),
-      invalid: build_invalid(form, field, options.valid, opts[:invalid_feedback]),
+      invalid: build_invalid(form, field, options.invalid, opts[:invalid_feedback]),
       hint: build_hint(form, field, options.hint, opts[:hint]),
+      prepend: build_prepend(form, field, options.prepend, opts[:prepend]),
+      append: build_append(form, field, options.append, opts[:append]),
       input: build_input(form, field, options.input, opts)
     }
   end
@@ -39,28 +41,57 @@ defmodule ExEffectiveBootstrap.Options do
   defp build_wrapper(form, field, options, opts), do: merge(options, opts)
 
   defp build_label(form, field, options, opts) when is_list(opts) do
-    options = merge(options, opts)
-    options |> Keyword.put_new(:text, Form.humanize(field))
+    merge(options, opts)
+    |> put_blank(:text, Form.humanize(field))
+    |> put_blank(:for, Form.input_id(form, field))
   end
 
-  defp build_label(form, field, options, opts), do: merge(options, [text: opts])
+  defp build_label(form, field, options, opts) do
+    build_label(form, field, options, [text: opts])
+  end
 
-  defp build_hint(form, field, options, opts) when is_list(opts), do: merge(options, opts)
-  defp build_hint(form, field, options, opts), do: merge(options, [text: opts])
+  defp build_hint(form, field, options, opts) when is_list(opts) do
+    merge(options, opts)
+    |> put_blank(:id, "#{Form.input_id(form, field)}_hint")
+  end
+
+  defp build_hint(form, field, options, opts) do
+    build_hint(form, field, options, [text: opts])
+  end
+
+  defp build_prepend(form, field, options, opts) when is_list(opts) do
+    merge(options, opts)
+  end
+
+  defp build_prepend(form, field, options, opts) do
+    build_prepend(form, field, options, [text: opts])
+  end
+
+  defp build_append(form, field, options, opts) when is_list(opts) do
+    merge(options, opts)
+  end
+
+  defp build_append(form, field, options, opts) do
+    build_append(form, field, options, [text: opts])
+  end
 
   defp build_valid(form, field, options, opts) when is_list(opts) do
-    options = merge(options, opts)
-    options |> Keyword.put_new(:text, Feedback.valid(form, field, options))
+    merge(options, opts)
+    |> put_blank(:text, Feedback.valid(form, field, options))
   end
 
-  defp build_valid(form, field, options, opts), do: merge(options, [text: opts])
+  defp build_valid(form, field, options, opts) do
+    build_valid(form, field, options, [text: opts])
+  end
 
   defp build_invalid(form, field, options, opts) when is_list(opts) do
-    options = merge(options, opts)
-    options |> Keyword.put_new(:text, Feedback.invalid(form, field, options))
+    merge(options, opts)
+    |> put_blank(:text, Feedback.invalid(form, field, options))
   end
 
-  defp build_invalid(form, field, options, opts), do: merge(options, [text: opts])
+  defp build_invalid(form, field, options, opts) do
+    build_invalid(form, field, options, [text: opts])
+  end
 
   defp build_input(form, field, options, opts) do
     drop = [:label, :as, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
@@ -155,4 +186,8 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
+
+  defp put_blank(options, key, value) do
+    if is_nil(options[key]), do: Keyword.put(options, key, value), else: options
+  end
 end
