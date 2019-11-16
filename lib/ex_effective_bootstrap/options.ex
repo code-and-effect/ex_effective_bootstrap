@@ -30,7 +30,7 @@ defmodule ExEffectiveBootstrap.Options do
     opts[:type] || opts[:as] || Form.input_type(form, field)
   end
 
-  def build(form, field, options, opts \\ []) do
+  def build(%__MODULE__{} = options, form, field, opts \\ []) do
     %__MODULE__{
       type: input_type(form, field, opts),
       wrapper: wrapper(form, field, options.wrapper, opts[:wrapper]),

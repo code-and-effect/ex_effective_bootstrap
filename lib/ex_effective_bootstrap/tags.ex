@@ -11,8 +11,8 @@ defmodule ExEffectiveBootstrap.Tags do
             prepend: nil,
             append: nil
 
-  def build(form, field, %Options{} = options) do
-    %__MODULE__{
+  def build(%Options{} = options, form, field) do
+    tags = %__MODULE__{
       label: label(options.label) || [],
       input: input(form, field, options) || [],
       valid: valid(options.valid) || [],
@@ -21,6 +21,8 @@ defmodule ExEffectiveBootstrap.Tags do
       prepend: prepend(options.prepend) || [],
       append: append(options.append) || [],
     }
+
+    {tags, options}
   end
 
   defp label(options) do
