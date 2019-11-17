@@ -31,21 +31,68 @@ defmodule ExEffectiveBootstrap.Options do
     opts[:type] || opts[:as] || Form.input_type(form, field)
   end
 
-  @spec build(any, any, any, any) :: none
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
-    %__MODULE__{
-      type: input_type(form, field, opts),
-      wrapper: wrapper(options.wrapper, opts[:wrapper], form, field),
-      label: label(options.label, opts[:label], form, field),
-      input: input(options.input, opts, form, field),
-      valid: valid(options.valid, opts[:valid_feedback], form, field),
-      invalid: invalid(options.invalid, opts[:invalid_feedback], form, field),
-      hint: hint(options.hint, opts[:hint], form, field),
-      prepend: prepend(options.prepend, opts[:prepend], form, field),
-      append: append(options.append, opts[:append], form, field),
-      input_group: input_group(options.input_group, opts, form, field)
-    }
+    options
+    |> update_wrapper(form, field, opts[:wrapper])
+    |> update_label(form, field, opts[:label])
+    |> IO.inspect
   end
+
+  def update_wrapper(options, form, field, value) do
+    update_in(options.wrapper, fn x -> merge(x, value) end)
+  end
+
+  def update_label(options, form, field, value) when is_list(value) do
+    value =
+      [text: Form.humanize(field), for: Form.input_id(form, field)]
+    |> merge(value)
+
+    update_in(options.label, fn x -> merge(x, value) end)
+  end
+
+  def update_label(options, form, field, value) do
+    update_label(options, form, field, [text: value])
+  end
+
+  #   defp label(options, opts, form, field) when is_list(opts) do
+  #   merge(options, opts)
+  #   |> put_blank(:text, Form.humanize(field))
+  #   |> put_blank(:for, Form.input_id(form, field))
+  # end
+
+  # def update(options, key, form, field, opt) when is_nil(opt) do
+  #   #update_in(options[key], fn x -> merge(x, opts[key]) end)
+  #   options
+  # end
+
+  # def update(options, key, form, field, opt) when is_list(opts[key]) do
+  #   update_in(options[key], fn x -> merge(x, opts[key]) end)
+  # end
+
+  # def update(options, key, form, field, opts) do
+  #   update(options, key, form, field, [text: opts[key]])
+  # end
+
+  # def add_wrapper(options, form, field, opts) do
+  #   update_in(options.wrapper, fn x -> merge(x, opts[:wrapper]) end)
+  # end
+
+    #get_and_update_in(options.wrapper, fn(x) -> {x, ExEffectiveBootstrap.Options.merge(x, opts) } end)
+    # build
+    # %__MODULE__{
+    #   type: input_type(form, field, opts),
+    #   wrapper: wrapper(options.wrapper, opts[:wrapper], form, field),
+    #   label: label(options.label, opts[:label], form, field),
+    #   input: input(options.input, opts, form, field),
+    #   valid: valid(options.valid, opts[:valid_feedback], form, field),
+    #   invalid: invalid(options.invalid, opts[:invalid_feedback], form, field),
+    #   hint: hint(options.hint, opts[:hint], form, field),
+    #   prepend: prepend(options.prepend, opts[:prepend], form, field),
+    #   append: append(options.append, opts[:append], form, field),
+    #   input_group: input_group(options.input_group, opts, form, field)
+    # }
+  # end
+
 
   @spec merge(nil | maybe_improper_list, nil | maybe_improper_list) :: maybe_improper_list
   def merge(nil, opts) when is_list(opts), do: opts
