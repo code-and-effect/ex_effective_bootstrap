@@ -62,6 +62,15 @@ defmodule ExEffectiveBootstrap.Inputs do
     end
   end
 
+  defp to_html({%Tags{} = tags, %Options{input_group: [enabled: true] } = options}) do
+    IO.inspect("TO HTML INPUT GROUP")
+    IO.inspect(options)
+
+    content_tag :div, options.wrapper do
+      [tags.label, tags.input, tags.valid, tags.invalid, tags.hint]
+    end
+  end
+
   defp to_html({%Tags{} = tags, %Options{} = options}) do
     IO.inspect("TO HTML default")
     IO.inspect(options)

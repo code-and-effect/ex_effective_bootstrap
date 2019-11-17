@@ -10,7 +10,8 @@ defmodule ExEffectiveBootstrap.Options do
             invalid: [class: "invalid-feedback"],
             hint: [class: "form-text text-muted"],
             prepend: [class: "input-group-text"],
-            append: [class: "input-group-text"]
+            append: [class: "input-group-text"],
+            input_group: [class: "input-group"]
 
   def form_options(form, opts \\ []) do
     default = [
@@ -30,6 +31,7 @@ defmodule ExEffectiveBootstrap.Options do
     opts[:type] || opts[:as] || Form.input_type(form, field)
   end
 
+  @spec build(any, any, any, any) :: none
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     %__MODULE__{
       type: input_type(form, field, opts),
@@ -41,6 +43,7 @@ defmodule ExEffectiveBootstrap.Options do
       hint: hint(options.hint, opts[:hint], form, field),
       prepend: prepend(options.prepend, opts[:prepend], form, field),
       append: append(options.append, opts[:append], form, field),
+      input_group: input_group(options.input_group, opts, form, field)
     }
   end
 
@@ -119,6 +122,16 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(with_errors)
     |> merge(with_hint)
     |> merge(options)
+  end
+
+  defp input_group(options, opts, form, field) do
+    options = merge(options, opts)
+
+    if (options.prepend[:text] || options.append[:text]) do
+      merge(options, enabled: true)
+    else
+      options
+    end
   end
 
   defp input_with_errors(form, field) do
