@@ -94,7 +94,6 @@ defmodule ExEffectiveBootstrap.Options do
 
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors(form, field)
-    # Options
     with_hint = if options.hint, do: input_with_hint(form, field)
 
     merged_opts =

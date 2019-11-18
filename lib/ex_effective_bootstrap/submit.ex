@@ -10,9 +10,9 @@ defmodule ExEffectiveBootstrap.Submit do
     ]
 
     new_value = [
-      Icons.icon(:spinner),
-      Icons.icon(:check),
-      Icons.icon(:times),
+      Icons.icon(:spinner, style: "display: none;"),
+      Icons.icon(:check, style: "display: none;"),
+      Icons.icon(:x, style: "display: none;"),
       content_tag(:span, value)
     ]
 

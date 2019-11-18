@@ -9,7 +9,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp effective_input(:email_input, form, field, opts) do
-    %Options{prepend: [text: Icons.icon(:at), class: "input-group-text"]}
+    %Options{prepend: [text: Icons.icon("at-sign"), class: "input-group-text"]}
     |> to_html(form, field, opts)
   end
 

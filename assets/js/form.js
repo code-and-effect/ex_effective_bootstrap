@@ -70,7 +70,7 @@ export default class EffectiveForm {
     this.flash('check', 1000, function () { window.EffectiveForm.flashSpin(); })
   }
 
-  flashError() { this.flash('times', 1000) }
+  flashError() { this.flash('x', 1000) }
   flashSpin() { this.flash('spinner', 5000) }
 
   flash(name, delay = 1000, fun) {
