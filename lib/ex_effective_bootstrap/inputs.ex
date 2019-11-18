@@ -1,6 +1,6 @@
 defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
-  alias ExEffectiveBootstrap.{Tags, Options}
+  alias ExEffectiveBootstrap.{Icons, Tags, Options}
   alias Phoenix.HTML.Form
 
   def input(form, field, opts \\ []) do
@@ -9,17 +9,18 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   defp effective_input(:email_input, form, field, opts) do
-    %Options{prepend: [text: "@", class: "input-group-text"]}
+    %Options{prepend: [text: Icons.icon(:at), class: "input-group-text"]}
     |> to_html(form, field, opts)
   end
 
   defp effective_input(:checkbox, form, field, opts) do
-   %Options{
+    %Options{
       wrapper: [class: "form-group custom-control custom-checkbox"],
       label: [class: "custom-control-label"],
-      input: [class: "custom-control-input"],
-    } |> to_html(form, field, opts)
-   end
+      input: [class: "custom-control-input"]
+    }
+    |> to_html(form, field, opts)
+  end
 
   defp effective_input(_, form, field, opts) do
     %Options{} |> to_html(form, field, opts)
@@ -52,5 +53,4 @@ defmodule ExEffectiveBootstrap.Inputs do
       [tags.label, content_tag(:div, input_group_tags, options.input_group), tags.hint]
     end
   end
-
 end

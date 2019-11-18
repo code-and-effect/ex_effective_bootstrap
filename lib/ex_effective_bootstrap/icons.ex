@@ -7,7 +7,7 @@ defmodule ExEffectiveBootstrap.Icons do
   # icon('check', class: 'small-3')
   def icon(svg, opts \\ []) do
     opts =
-     opts
+      opts
       |> Options.merge(class: "eb-icon eb-icon-#{svg}")
       |> Enum.map(fn {key, value} -> "#{key}='#{value}'" end)
       |> Enum.join(" ")

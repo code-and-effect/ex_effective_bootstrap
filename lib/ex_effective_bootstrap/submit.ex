@@ -9,10 +9,15 @@ defmodule ExEffectiveBootstrap.Submit do
       onclick: "return EffectiveForm.onSubmitClick(this);"
     ]
 
-    new_value = [Icons.icon(:spinner), Icons.icon(:check), Icons.icon(:times), content_tag(:span, value)]
+    new_value = [
+      Icons.icon(:spinner),
+      Icons.icon(:check),
+      Icons.icon(:times),
+      content_tag(:span, value)
+    ]
+
     new_opts = Options.merge(opts, defaults)
 
     Form.submit(new_value, new_opts)
   end
-
 end

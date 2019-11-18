@@ -19,7 +19,7 @@ defmodule ExEffectiveBootstrap.Tags do
       invalid: invalid(options.invalid) || [],
       hint: hint(options.hint) || [],
       prepend: prepend(options.prepend) || [],
-      append: append(options.append) || [],
+      append: append(options.append) || []
     }
 
     {tags, options}
@@ -60,5 +60,4 @@ defmodule ExEffectiveBootstrap.Tags do
       end
     end
   end
-
 end

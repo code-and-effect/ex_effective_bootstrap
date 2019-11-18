@@ -53,11 +53,12 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_required(options, form, field, opts \\ []) do
-    required = cond do
-      Keyword.has_key?(opts, :required) -> opts[:required]
-      Keyword.has_key?(opts[:input] || [], :required) -> opts.input[:required]
-      true -> Keyword.get(Form.input_validations(form, field), :required, false)
-    end
+    required =
+      cond do
+        Keyword.has_key?(opts, :required) -> opts[:required]
+        Keyword.has_key?(opts[:input] || [], :required) -> opts.input[:required]
+        true -> Keyword.get(Form.input_validations(form, field), :required, false)
+      end
 
     put_in(options.required, !!required)
   end
@@ -84,7 +85,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_label(options, form, field, opts) do
-    update_label(options, form, field, [text: opts])
+    update_label(options, form, field, text: opts)
   end
 
   defp update_input(options, form, field, opts) do
@@ -93,7 +94,8 @@ defmodule ExEffectiveBootstrap.Options do
 
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors(form, field)
-    with_hint = if options.hint, do: input_with_hint(form, field) # Options
+    # Options
+    with_hint = if options.hint, do: input_with_hint(form, field)
 
     merged_opts =
       []
@@ -119,7 +121,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_valid(options, form, field, opts) do
-    update_valid(options, form, field, [text: opts])
+    update_valid(options, form, field, text: opts)
   end
 
   defp update_invalid(options, form, field, false) do
@@ -136,7 +138,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_invalid(options, form, field, opts) do
-    update_invalid(options, form, field, [text: opts])
+    update_invalid(options, form, field, text: opts)
   end
 
   defp update_hint(options, form, field, false) do
@@ -153,7 +155,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_hint(options, form, field, opts) do
-    update_hint(options, form, field, [text: opts])
+    update_hint(options, form, field, text: opts)
   end
 
   defp update_prepend(options, form, field, false) do
@@ -169,7 +171,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_prepend(options, form, field, opts) do
-    update_prepend(options, form, field, [text: opts])
+    update_prepend(options, form, field, text: opts)
   end
 
   defp update_append(options, form, field, false) do
@@ -185,7 +187,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_append(options, form, field, opts) do
-    update_append(options, form, field, [text: opts])
+    update_append(options, form, field, text: opts)
   end
 
   defp update_input_group(options, form, field, false) do
@@ -201,18 +203,27 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp remove_input_group(options, form, field) do
-    if options.append[:text] || options.prepend[:text] do
-      options
-    else
-      options = put_in(options.append, false)
-      options = put_in(options.prepend, false)
-      options = put_in(options.input_group, false)
-      options
+    cond do
+      options.append[:text] && options.prepend[:text] ->
+        options
+
+      options.append[:text] ->
+        put_in(options.prepend, false)
+
+      options.prepend[:text] ->
+        put_in(options.append, false)
+
+      true ->
+        options = put_in(options.append, false)
+        options = put_in(options.prepend, false)
+        options = put_in(options.input_group, false)
+        options
     end
   end
 
   def merge(nil, opts) when is_list(opts), do: opts
   def merge(options, nil) when is_list(options), do: options
+
   def merge(options, opts) when is_list(options) and is_list(opts) do
     Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
   end
@@ -240,5 +251,4 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
-
 end
