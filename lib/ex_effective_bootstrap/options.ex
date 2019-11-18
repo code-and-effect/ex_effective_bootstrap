@@ -156,6 +156,10 @@ defmodule ExEffectiveBootstrap.Options do
     put_in(options.prepend, false)
   end
 
+  defp update_prepend(options, form, field, nil) do
+    update_prepend(options, form, field, [])
+  end
+
   defp update_prepend(options, form, field, opts) when is_list(opts) do
     put_in(options.prepend, merge(options.prepend, opts))
   end
@@ -166,6 +170,10 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp update_append(options, form, field, false) do
     put_in(options.append, false)
+  end
+
+  defp update_append(options, form, field, nil) do
+    update_append(options, form, field, [])
   end
 
   defp update_append(options, form, field, opts) when is_list(opts) do

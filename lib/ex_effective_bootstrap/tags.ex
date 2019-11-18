@@ -47,7 +47,7 @@ defmodule ExEffectiveBootstrap.Tags do
 
   defp prepend(options) do
     if options do
-      content_tag(:div, class: options[:class]) do
+      content_tag(:div, class: "input-group-prepend") do
         content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
     end
@@ -55,7 +55,7 @@ defmodule ExEffectiveBootstrap.Tags do
 
   defp append(options) do
     if options do
-      content_tag(:div, class: options[:class]) do
+      content_tag(:div, class: "input-group-append") do
         content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
     end
