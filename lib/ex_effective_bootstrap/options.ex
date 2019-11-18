@@ -4,7 +4,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   defstruct type: nil,
             wrapper: [class: "form-group"],
-            label: [for: nil],
+            label: [],
             input: [class: "form-control"],
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
@@ -44,7 +44,6 @@ defmodule ExEffectiveBootstrap.Options do
     |> update_input_group(form, field, opts[:input_group])
     |> remove_input_group(form, field)
     |> update_input(form, field, opts)
-    |> IO.inspect
   end
 
   defp update_type(options, form, field, opts) do
@@ -74,14 +73,20 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp update_input(options, form, field, opts) do
     drop = [:label, :as, :input, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
+    opts = merge(opts[:input], Keyword.drop(opts, drop))
 
-    merged_opts = merge(opts[:input], Keyword.drop(opts, drop))
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors(form, field)
-    with_hint = input_with_hint(form, field, opts)
-    merged_opts = merged_opts |> merge(validations) |> merge(with_errors) |> merge(with_hint)
+    with_hint = if options.hint, do: input_with_hint(form, field) # Options
 
-    put_in(options.input, merge(options.label, merged_opts))
+    merged_opts =
+      []
+      |> merge(validations)
+      |> merge(with_errors)
+      |> merge(with_hint)
+      |> merge(opts)
+
+    put_in(options.input, merge(options.input, merged_opts))
   end
 
   defp update_valid(options, form, field, false) do
@@ -127,7 +132,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_hint(options, form, field, opts) when is_list(opts) do
-    opts = ["aria-describedby": "#{Form.input_id(form, field)}_hint"] |> merge(opts)
+    opts = [id: "#{Form.input_id(form, field)}_hint"] |> merge(opts)
     put_in(options.hint, merge(options.hint, opts))
   end
 
@@ -182,132 +187,10 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
-
-  #   defp label(options, opts, form, field) when is_list(opts) do
-  #   merge(options, opts)
-  #   |> put_blank(:text, Form.humanize(field))
-  #   |> put_blank(:for, Form.input_id(form, field))
-  # end
-
-  # def update(options, key, form, field, opt) when is_nil(opt) do
-  #   #update_in(options[key], fn x -> merge(x, opts[key]) end)
-  #   options
-  # end
-
-  # def update(options, key, form, field, opt) when is_list(opts[key]) do
-  #   update_in(options[key], fn x -> merge(x, opts[key]) end)
-  # end
-
-  # def update(options, key, form, field, opts) do
-  #   update(options, key, form, field, [text: opts[key]])
-  # end
-
-  # def add_wrapper(options, form, field, opts) do
-  #   update_in(options.wrapper, fn x -> merge(x, opts[:wrapper]) end)
-  # end
-
-    #get_and_update_in(options.wrapper, fn(x) -> {x, ExEffectiveBootstrap.Options.merge(x, opts) } end)
-    # build
-    # %__MODULE__{
-    #   type: input_type(form, field, opts),
-    #   wrapper: wrapper(options.wrapper, opts[:wrapper], form, field),
-    #   label: label(options.label, opts[:label], form, field),
-    #   input: input(options.input, opts, form, field),
-    #   valid: valid(options.valid, opts[:valid_feedback], form, field),
-    #   invalid: invalid(options.invalid, opts[:invalid_feedback], form, field),
-    #   hint: hint(options.hint, opts[:hint], form, field),
-    #   prepend: prepend(options.prepend, opts[:prepend], form, field),
-    #   append: append(options.append, opts[:append], form, field),
-    #   input_group: input_group(options.input_group, opts, form, field)
-    # }
-  # end
-
-
-  @spec merge(nil | maybe_improper_list, nil | maybe_improper_list) :: maybe_improper_list
   def merge(nil, opts) when is_list(opts), do: opts
   def merge(options, nil) when is_list(options), do: options
   def merge(options, opts) when is_list(options) and is_list(opts) do
     Keyword.merge(options, opts) |> merge_class(options[:class], opts[:class])
-  end
-
-  defp wrapper(options, opts, form, field), do: merge(options, opts)
-
-  defp label(options, opts, form, field) when is_list(opts) do
-    merge(options, opts)
-    |> put_blank(:text, Form.humanize(field))
-    |> put_blank(:for, Form.input_id(form, field))
-  end
-
-  defp label(options, opts, form, field) do
-    label(options, [text: opts], form, field)
-  end
-
-  defp hint(options, opts, form, field) when is_list(opts) do
-    merge(options, opts)
-    |> put_blank(:id, "#{Form.input_id(form, field)}_hint")
-  end
-
-  defp hint(options, opts, form, field) do
-    hint(options, [text: opts], form, field)
-  end
-
-  defp prepend(options, opts, form, field) when is_list(opts) or is_nil(opts) do
-    merge(options, opts)
-  end
-
-  defp prepend(options, opts, form, field) do
-    prepend(options, [text: opts], form, field)
-  end
-
-  defp append(options, opts, form, field) when is_list(opts) or is_nil(opts) do
-    merge(options, opts)
-  end
-
-  defp append(options, opts, form, field) do
-    append(options, [text: opts], form, field)
-  end
-
-  defp valid(options, opts, form, field) when is_list(opts) do
-    merge(options, opts)
-    |> put_blank(:text, Feedback.valid(form, field, options))
-  end
-
-  defp valid(options, opts, form, field) do
-    valid(options, [text: opts], form, field)
-  end
-
-  defp invalid(options, opts, form, field) when is_list(opts) do
-    merge(options, opts)
-    |> put_blank(:text, Feedback.invalid(form, field, options))
-  end
-
-  defp invalid(options, opts, form, field) do
-    invalid(options, [text: opts], form, field)
-  end
-
-  defp input(options, opts, form, field) do
-    drop = [:label, :as, :input, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
-
-    merged_opts = merge(opts[:input], Keyword.drop(opts, drop))
-    validations = Form.input_validations(form, field)
-    with_errors = input_with_errors(form, field)
-    with_hint = input_with_hint(form, field, opts)
-
-    merged_opts
-    |> merge(validations)
-    |> merge(with_errors)
-    |> merge(with_hint)
-    |> merge(options)
-  end
-
-  defp input_group(options, opts, form, field) do
-    options = merge(options, opts)
-
-    if (options.prepend[:text] || options.append[:text]) do
-      merge(options, enabled: true)
-    else
-      options
-    end
   end
 
   defp input_with_errors(form, field) do
@@ -318,8 +201,8 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
-  defp input_with_hint(form, field, options) do
-    if options[:hint], do: ["aria-describedby": "#{Form.input_id(form, field)}_hint"]
+  defp input_with_hint(form, field) do
+    ["aria-describedby": "#{Form.input_id(form, field)}_hint"]
   end
 
   # submitted with errors
@@ -334,7 +217,4 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
 
-  defp put_blank(options, key, value) do
-    if is_nil(options[key]), do: Keyword.put(options, key, value), else: options
-  end
 end

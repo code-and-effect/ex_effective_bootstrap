@@ -26,7 +26,7 @@ defmodule ExEffectiveBootstrap.Tags do
   end
 
   defp label(options) do
-    if options[:text], do: content_tag(:label, options[:text], Keyword.delete(options, :text))
+    if options, do: content_tag(:label, options[:text], Keyword.delete(options, :text))
   end
 
   defp input(form, field, options) do
@@ -34,28 +34,28 @@ defmodule ExEffectiveBootstrap.Tags do
   end
 
   defp valid(options) do
-    if options[:text], do: content_tag(:div, options[:text], Keyword.delete(options, :text))
+    if options, do: content_tag(:div, options[:text], Keyword.delete(options, :text))
   end
 
   defp invalid(options) do
-    if options[:text], do: content_tag(:div, options[:text], Keyword.delete(options, :text))
+    if options, do: content_tag(:div, options[:text], Keyword.delete(options, :text))
   end
 
   defp hint(options) do
-    if options[:text], do: content_tag(:small, options[:text], Keyword.delete(options, :text))
+    if options, do: content_tag(:small, options[:text], Keyword.delete(options, :text))
   end
 
   defp prepend(options) do
-    if options[:text] do
-      content_tag(:div, class: "input-group-prepend") do
+    if options do
+      content_tag(:div, class: options[:class]) do
         content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
     end
   end
 
   defp append(options) do
-    if options[:text] do
-      content_tag(:div, class: "input-group-append") do
+    if options do
+      content_tag(:div, class: options[:class]) do
         content_tag(:span, options[:text], Keyword.delete(options, :text))
       end
     end
