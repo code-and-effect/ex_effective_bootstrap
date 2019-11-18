@@ -33,26 +33,155 @@ defmodule ExEffectiveBootstrap.Options do
 
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     options
+    |> update_type(form, field, opts)
     |> update_wrapper(form, field, opts[:wrapper])
     |> update_label(form, field, opts[:label])
+    |> update_valid(form, field, opts[:valid_feedback])
+    |> update_invalid(form, field, opts[:invalid_feedback])
+    |> update_hint(form, field, opts[:hint])
+    |> update_prepend(form, field, opts[:prepend])
+    |> update_append(form, field, opts[:append])
+    |> update_input_group(form, field, opts[:input_group])
+    |> remove_input_group(form, field)
+    |> update_input(form, field, opts)
     |> IO.inspect
   end
 
-  def update_wrapper(options, form, field, value) do
-    update_in(options.wrapper, fn x -> merge(x, value) end)
+  defp update_type(options, form, field, opts) do
+    put_in(options.type, input_type(form, field, opts))
   end
 
-  def update_label(options, form, field, value) when is_list(value) do
-    value =
-      [text: Form.humanize(field), for: Form.input_id(form, field)]
-    |> merge(value)
-
-    update_in(options.label, fn x -> merge(x, value) end)
+  defp update_wrapper(options, form, field, opts) do
+    put_in(options.wrapper, merge(options.wrapper, opts))
   end
 
-  def update_label(options, form, field, value) do
-    update_label(options, form, field, [text: value])
+  defp update_label(options, form, field, false) do
+    put_in(options.label, false)
   end
+
+  defp update_label(options, form, field, nil) do
+    update_label(options, form, field, [])
+  end
+
+  defp update_label(options, form, field, opts) when is_list(opts) do
+    opts = [text: Form.humanize(field), for: Form.input_id(form, field)] |> merge(opts)
+    put_in(options.label, merge(options.label, opts))
+  end
+
+  defp update_label(options, form, field, opts) do
+    update_label(options, form, field, [text: opts])
+  end
+
+  defp update_input(options, form, field, opts) do
+    drop = [:label, :as, :input, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
+
+    merged_opts = merge(opts[:input], Keyword.drop(opts, drop))
+    validations = Form.input_validations(form, field)
+    with_errors = input_with_errors(form, field)
+    with_hint = input_with_hint(form, field, opts)
+    merged_opts = merged_opts |> merge(validations) |> merge(with_errors) |> merge(with_hint)
+
+    put_in(options.input, merge(options.label, merged_opts))
+  end
+
+  defp update_valid(options, form, field, false) do
+    put_in(options.valid, false)
+  end
+
+  defp update_valid(options, form, field, nil) do
+    update_valid(options, form, field, [])
+  end
+
+  defp update_valid(options, form, field, opts) when is_list(opts) do
+    opts = [text: Feedback.valid(form, field, opts)] |> merge(opts)
+    put_in(options.valid, merge(options.valid, opts))
+  end
+
+  defp update_valid(options, form, field, opts) do
+    update_valid(options, form, field, [text: opts])
+  end
+
+  defp update_invalid(options, form, field, false) do
+    put_in(options.invalid, false)
+  end
+
+  defp update_invalid(options, form, field, nil) do
+    update_invalid(options, form, field, [])
+  end
+
+  defp update_invalid(options, form, field, opts) when is_list(opts) do
+    opts = [text: Feedback.invalid(form, field, opts)] |> merge(opts)
+    put_in(options.invalid, merge(options.invalid, opts))
+  end
+
+  defp update_invalid(options, form, field, opts) do
+    update_invalid(options, form, field, [text: opts])
+  end
+
+  defp update_hint(options, form, field, false) do
+    put_in(options.hint, false)
+  end
+
+  defp update_hint(options, form, field, nil) do
+    put_in(options.hint, false)
+  end
+
+  defp update_hint(options, form, field, opts) when is_list(opts) do
+    opts = ["aria-describedby": "#{Form.input_id(form, field)}_hint"] |> merge(opts)
+    put_in(options.hint, merge(options.hint, opts))
+  end
+
+  defp update_hint(options, form, field, opts) do
+    update_hint(options, form, field, [text: opts])
+  end
+
+  defp update_prepend(options, form, field, false) do
+    put_in(options.prepend, false)
+  end
+
+  defp update_prepend(options, form, field, opts) when is_list(opts) do
+    put_in(options.prepend, merge(options.prepend, opts))
+  end
+
+  defp update_prepend(options, form, field, opts) do
+    update_prepend(options, form, field, [text: opts])
+  end
+
+  defp update_append(options, form, field, false) do
+    put_in(options.append, false)
+  end
+
+  defp update_append(options, form, field, opts) when is_list(opts) do
+    put_in(options.append, merge(options.append, opts))
+  end
+
+  defp update_append(options, form, field, opts) do
+    update_append(options, form, field, [text: opts])
+  end
+
+  defp update_input_group(options, form, field, false) do
+    put_in(options.input_group, false)
+  end
+
+  defp update_input_group(options, form, field, nil) do
+    update_input_group(options, form, field, [])
+  end
+
+  defp update_input_group(options, form, field, opts) when is_list(opts) do
+    put_in(options.input_group, merge(options.input_group, opts))
+  end
+
+  defp remove_input_group(options, form, field) do
+    if options.append[:text] || options.prepend[:text] do
+      options
+    else
+      options = put_in(options.append, false)
+      options = put_in(options.prepend, false)
+      options = put_in(options.input_group, false)
+      options
+    end
+  end
+
 
   #   defp label(options, opts, form, field) when is_list(opts) do
   #   merge(options, opts)
