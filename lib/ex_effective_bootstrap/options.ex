@@ -62,7 +62,11 @@ defmodule ExEffectiveBootstrap.Options do
     put_in(options.required, !!required)
   end
 
-  defp update_wrapper(options, form, field, opts) do
+  defp update_wrapper(options, form, field, nil) do
+    update_wrapper(options, form, field, [])
+  end
+
+  defp update_wrapper(options, form, field, opts) when is_list(opts) do
     put_in(options.wrapper, merge(options.wrapper, opts))
   end
 
