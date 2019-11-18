@@ -31,22 +31,24 @@ defmodule ExEffectiveBootstrap.Feedback do
     end)
   end
 
-  defp validations(form, field, _options) do
+  defp validations(form, field, options) do
     Form.input_validations(form, field)
+    |> Keyword.put(:required, options.required)
     |> Enum.map(fn {msg, opts} -> validation(msg, opts) end)
   end
 
   defp validation(:required, true), do: ["can't be blank"]
+  defp validation(:required, _), do: []
   defp validation(:minlength, count), do: ["should be at least #{count} character(s)"]
   defp validation(:maxlength, _), do: []
   defp validation(unknown, opts), do: ["unknown validation #{unknown} #{opts}"]
 
   defp feedbacks(form, field, options) do
-    input_type = options[:type] || options[:as] || Form.input_type(form, field)
-    feedback(input_type)
+    feedback(options.type)
   end
 
   defp feedback(:email_input), do: ["must be an email"]
   defp feedback(:password_input), do: []
+  defp feedback(:checkbox), do: []
   defp feedback(unknown), do: ["unknown feedback #{unknown}"]
 end

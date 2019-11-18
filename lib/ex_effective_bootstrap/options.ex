@@ -3,6 +3,7 @@ defmodule ExEffectiveBootstrap.Options do
   alias Phoenix.HTML.Form
 
   defstruct type: nil,
+            required: nil,
             wrapper: [class: "form-group"],
             label: [],
             input: [class: "form-control"],
@@ -34,20 +35,31 @@ defmodule ExEffectiveBootstrap.Options do
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     options
     |> update_type(form, field, opts)
+    |> update_required(form, field, opts)
     |> update_wrapper(form, field, opts[:wrapper])
     |> update_label(form, field, opts[:label])
-    |> update_valid(form, field, opts[:valid_feedback])
-    |> update_invalid(form, field, opts[:invalid_feedback])
     |> update_hint(form, field, opts[:hint])
+    |> update_input(form, field, opts)
+    |> update_valid(form, field, opts[:valid])
+    |> update_invalid(form, field, opts[:invalid])
     |> update_prepend(form, field, opts[:prepend])
     |> update_append(form, field, opts[:append])
     |> update_input_group(form, field, opts[:input_group])
     |> remove_input_group(form, field)
-    |> update_input(form, field, opts)
   end
 
   defp update_type(options, form, field, opts) do
     put_in(options.type, input_type(form, field, opts))
+  end
+
+  defp update_required(options, form, field, opts \\ []) do
+    required = cond do
+      Keyword.has_key?(opts, :required) -> opts[:required]
+      Keyword.has_key?(opts[:input] || [], :required) -> opts.input[:required]
+      true -> Keyword.get(Form.input_validations(form, field), :required, false)
+    end
+
+    put_in(options.required, !!required)
   end
 
   defp update_wrapper(options, form, field, opts) do
@@ -72,7 +84,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_input(options, form, field, opts) do
-    drop = [:label, :as, :input, :type, :valid_feedback, :invalid_feedback, :wrapper, :hint, :prepend, :append]
+    drop = [:label, :as, :input, :type, :valid, :invalid, :wrapper, :hint, :prepend, :append]
     opts = merge(opts[:input], Keyword.drop(opts, drop))
 
     validations = Form.input_validations(form, field)
@@ -98,7 +110,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_valid(options, form, field, opts) when is_list(opts) do
-    opts = [text: Feedback.valid(form, field, opts)] |> merge(opts)
+    opts = [text: Feedback.valid(form, field, options)] |> merge(opts)
     put_in(options.valid, merge(options.valid, opts))
   end
 
@@ -115,7 +127,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update_invalid(options, form, field, opts) when is_list(opts) do
-    opts = [text: Feedback.invalid(form, field, opts)] |> merge(opts)
+    opts = [text: Feedback.invalid(form, field, options)] |> merge(opts)
     put_in(options.invalid, merge(options.invalid, opts))
   end
 
