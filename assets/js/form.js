@@ -13,12 +13,6 @@ export default class EffectiveForm {
     let valid = form.checkValidity();
     let $form = $(form);
 
-    if ($form.hasClass('.was-validated')) {
-      this.reset($form);
-    } else {
-      this.resetServerSideValidations($form)
-    }
-
     if (valid) { this.submitting($form); } else { this.invalidate($form); }
 
     return valid;
@@ -34,6 +28,8 @@ export default class EffectiveForm {
   }
 
   invalidate($form) {
+    this.reset($form);
+
     $form.addClass('was-validated');
     $form.addClass('form-is-invalid');
     $form.find('.effective-current-submit').removeClass('.effective-current-submit');
@@ -53,11 +49,6 @@ export default class EffectiveForm {
   }
 
   reset($form) {
-    this.resetClientSideValidations($form)
-    this.resetServerSideValidations($form)
-  }
-
-  resetClientSideValidations($form) {
     // Reset the form
     $form.removeClass('was-validated');
     $form.removeClass('form-is-invalid');
@@ -67,15 +58,12 @@ export default class EffectiveForm {
     $form.find('.effective-current-submit').removeClass('.effective-current-submit');
     $form.find('[type=submit]').removeAttr('disabled');
 
-    this.resetClientSideValidations($form)
-
-    return true;
-  }
-
-  resetServerSideValidations($form) {
+    // Server side validations
     $form.find('.alert.is-invalid').remove();
     $form.find('.is-invalid').removeClass('is-invalid');
-    $form.find('.is-valid').removeClass('is-valid');
+    $form.find('.is-valid').removeClass('is-valid')
+
+    return true;
   }
 
   flashSuccess() {
