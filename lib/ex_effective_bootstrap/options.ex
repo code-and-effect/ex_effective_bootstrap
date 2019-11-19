@@ -32,27 +32,30 @@ defmodule ExEffectiveBootstrap.Options do
     opts[:type] || opts[:as] || Form.input_type(form, field)
   end
 
+  def to_options(map), do: struct(__MODULE__, map)
+
+  @spec build(ExEffectiveBootstrap.Options.t(), any, any, nil | keyword | map) :: any
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
-    options
-    |> update_type(form, field, opts)
-    |> update_required(form, field, opts)
-    |> update_wrapper(form, field, opts[:wrapper])
-    |> update_label(form, field, opts[:label])
-    |> update_hint(form, field, opts[:hint])
-    |> update_input(form, field, opts)
-    |> update_valid(form, field, opts[:valid])
-    |> update_invalid(form, field, opts[:invalid])
-    |> update_prepend(form, field, opts[:prepend])
-    |> update_append(form, field, opts[:append])
-    |> update_input_group(form, field, opts[:input_group])
-    |> remove_input_group(form, field)
+    Map.from_struct(options)
+    |> update(:type, form, field, opts)
+    |> update(:required, form, field, opts)
+    |> update(:wrapper, form, field, opts)
+    |> update(:label, form, field, opts)
+    |> update(:hint, form, field, opts)
+    |> update(:valid, form, field, opts)
+    |> update(:invalid, form, field, opts)
+    |> update(:prepend, form, field, opts)
+    |> update(:append, form, field, opts)
+    |> update(:input_group, form, field, opts)
+    |> update(:input, form, field, opts)
+    |> to_options()
   end
 
-  defp update_type(options, form, field, opts) do
-    put_in(options.type, input_type(form, field, opts))
+  defp update(options, :type, form, field, opts) do
+    Map.put(options, :type, input_type(form, field, opts))
   end
 
-  defp update_required(options, form, field, opts \\ []) do
+  defp update(options, :required, form, field, opts) do
     required =
       cond do
         Keyword.has_key?(opts, :required) -> opts[:required]
@@ -60,35 +63,10 @@ defmodule ExEffectiveBootstrap.Options do
         true -> Keyword.get(Form.input_validations(form, field), :required, false)
       end
 
-    put_in(options.required, !!required)
+    Map.put(options, :required, !!required)
   end
 
-  defp update_wrapper(options, form, field, nil) do
-    update_wrapper(options, form, field, [])
-  end
-
-  defp update_wrapper(options, form, field, opts) when is_list(opts) do
-    put_in(options.wrapper, merge(options.wrapper, opts))
-  end
-
-  defp update_label(options, form, field, false) do
-    put_in(options.label, false)
-  end
-
-  defp update_label(options, form, field, nil) do
-    update_label(options, form, field, [])
-  end
-
-  defp update_label(options, form, field, opts) when is_list(opts) do
-    opts = [text: Form.humanize(field), for: Form.input_id(form, field)] |> merge(opts)
-    put_in(options.label, merge(options.label, opts))
-  end
-
-  defp update_label(options, form, field, opts) do
-    update_label(options, form, field, text: opts)
-  end
-
-  defp update_input(options, form, field, opts) do
+  defp update(options, :input, form, field, opts) do
     drop = [:label, :as, :input, :type, :valid, :invalid, :wrapper, :hint, :prepend, :append]
     opts = merge(opts[:input], Keyword.drop(opts, drop))
 
@@ -103,120 +81,69 @@ defmodule ExEffectiveBootstrap.Options do
       |> merge(with_hint)
       |> merge(opts)
 
-    put_in(options.input, merge(options.input, merged_opts))
+    Map.put(options, :input, merge(options.input, merged_opts))
   end
 
-  defp update_valid(options, form, field, false) do
-    put_in(options.valid, false)
+  defp update(options, key, form, field, opts \\ []) do
+    put(options, key, opts[key], form, field)
   end
 
-  defp update_valid(options, form, field, nil) do
-    update_valid(options, form, field, [])
+  defp put(options, key, false, _, _), do: Map.put(options, key, false)
+  defp put(options, key, nil, form, field), do: put(options, key, [], form, field)
+
+  defp put(options, key, value, form, field) when is_list(value) == false do
+    put(options, key, [text: value], form, field)
   end
 
-  defp update_valid(options, form, field, opts) when is_list(opts) do
+  defp put(options, :wrapper, opts, form, field) do
+    Map.put(options, :wrapper, merge(options[:wrapper], opts))
+  end
+
+  defp put(options, :label, opts, form, field) do
+    opts = [text: Form.humanize(field), for: Form.input_id(form, field)] |> merge(opts)
+    Map.put(options, :label, merge(options[:label], opts))
+  end
+
+  defp put(options, :hint, opts, form, field) do
+    if opts[:text] do
+      opts = [id: "#{Form.input_id(form, field)}_hint"] |> merge(opts)
+      Map.put(options, :hint, merge(options[:hint], opts))
+    else
+      Map.put(options, :hint, false)
+    end
+  end
+
+  defp put(options, :valid, opts, form, field) do
     opts = [text: Feedback.valid(form, field, options)] |> merge(opts)
-    put_in(options.valid, merge(options.valid, opts))
+    Map.put(options, :valid, merge(options[:valid], opts))
   end
 
-  defp update_valid(options, form, field, opts) do
-    update_valid(options, form, field, text: opts)
-  end
-
-  defp update_invalid(options, form, field, false) do
-    put_in(options.invalid, false)
-  end
-
-  defp update_invalid(options, form, field, nil) do
-    update_invalid(options, form, field, [])
-  end
-
-  defp update_invalid(options, form, field, opts) when is_list(opts) do
+  defp put(options, :invalid, opts, form, field) do
     opts = [text: Feedback.invalid(form, field, options)] |> merge(opts)
-    put_in(options.invalid, merge(options.invalid, opts))
+    Map.put(options, :invalid, merge(options[:invalid], opts))
   end
 
-  defp update_invalid(options, form, field, opts) do
-    update_invalid(options, form, field, text: opts)
+  defp put(options, :prepend, opts, form, field) do
+    if options[:prepend][:text] || opts[:text] do
+      Map.put(options, :prepend, merge(options[:prepend], opts))
+    else
+      Map.put(options, :prepend, false)
+    end
   end
 
-  defp update_hint(options, form, field, false) do
-    put_in(options.hint, false)
+  defp put(options, :append, opts, form, field) do
+    if options[:append][:text] || opts[:text] do
+      Map.put(options, :append, merge(options[:append], opts))
+    else
+      Map.put(options, :append, false)
+    end
   end
 
-  defp update_hint(options, form, field, nil) do
-    put_in(options.hint, false)
-  end
-
-  defp update_hint(options, form, field, opts) when is_list(opts) do
-    opts = [id: "#{Form.input_id(form, field)}_hint"] |> merge(opts)
-    put_in(options.hint, merge(options.hint, opts))
-  end
-
-  defp update_hint(options, form, field, opts) do
-    update_hint(options, form, field, text: opts)
-  end
-
-  defp update_prepend(options, form, field, false) do
-    put_in(options.prepend, false)
-  end
-
-  defp update_prepend(options, form, field, nil) do
-    update_prepend(options, form, field, [])
-  end
-
-  defp update_prepend(options, form, field, opts) when is_list(opts) do
-    put_in(options.prepend, merge(options.prepend, opts))
-  end
-
-  defp update_prepend(options, form, field, opts) do
-    update_prepend(options, form, field, text: opts)
-  end
-
-  defp update_append(options, form, field, false) do
-    put_in(options.append, false)
-  end
-
-  defp update_append(options, form, field, nil) do
-    update_append(options, form, field, [])
-  end
-
-  defp update_append(options, form, field, opts) when is_list(opts) do
-    put_in(options.append, merge(options.append, opts))
-  end
-
-  defp update_append(options, form, field, opts) do
-    update_append(options, form, field, text: opts)
-  end
-
-  defp update_input_group(options, form, field, false) do
-    put_in(options.input_group, false)
-  end
-
-  defp update_input_group(options, form, field, nil) do
-    update_input_group(options, form, field, [])
-  end
-
-  defp update_input_group(options, form, field, opts) when is_list(opts) do
-    put_in(options.input_group, merge(options.input_group, opts))
-  end
-
-  defp remove_input_group(options, form, field) do
-    cond do
-      options.append[:text] && options.prepend[:text] ->
-        options
-
-      options.append[:text] ->
-        put_in(options.prepend, false)
-
-      options.prepend[:text] ->
-        put_in(options.append, false)
-
-      true ->
-        options = put_in(options.append, false)
-        options = put_in(options.prepend, false)
-        options = put_in(options.input_group, false)
-        options
+  defp put(options, :input_group, opts, form, field) do
+    if options[:prepend] || options[:append] do
+      Map.put(options, :input_group, merge(options[:input_group], opts))
+    else
+      Map.put(options, :input_group, false)
     end
   end
 
