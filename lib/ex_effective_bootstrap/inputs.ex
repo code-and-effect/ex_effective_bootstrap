@@ -4,21 +4,20 @@ defmodule ExEffectiveBootstrap.Inputs do
   alias Phoenix.HTML.Form
 
   def input(form, field, opts \\ []) do
-    Options.input_type(form, field, opts)
-    |> effective_input(form, field, opts)
+    effective_input(form, Options.input_type(form, field, opts), field, opts)
   end
 
-  defp effective_input(:email_input, form, field, opts) do
+  def effective_input(form, :email_input, field, opts) do
     %Options{prepend: [text: Icons.icon("at-sign"), class: "input-group-text"]}
     |> to_html(form, field, opts)
   end
 
-  defp effective_input(:password_input, form, field, opts) do
+  def effective_input(form, :password_input, field, opts) do
     %Options{prepend: [text: Icons.icon(:key), class: "input-group-text"]}
     |> to_html(form, field, opts)
   end
 
-  defp effective_input(:checkbox, form, field, opts) do
+  def effective_input(form, :checkbox, field, opts) do
     %Options{
       wrapper: [class: "form-group custom-control custom-checkbox"],
       label: [class: "custom-control-label"],
@@ -27,7 +26,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     |> to_html(form, field, opts)
   end
 
-  defp effective_input(_, form, field, opts) do
+  def effective_input(form, _type, field, opts) do
     %Options{} |> to_html(form, field, opts)
   end
 
