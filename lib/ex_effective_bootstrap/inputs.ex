@@ -13,6 +13,11 @@ defmodule ExEffectiveBootstrap.Inputs do
     |> to_html(form, field, opts)
   end
 
+  defp effective_input(:password_input, form, field, opts) do
+    %Options{prepend: [text: Icons.icon(:key), class: "input-group-text"]}
+    |> to_html(form, field, opts)
+  end
+
   defp effective_input(:checkbox, form, field, opts) do
     %Options{
       wrapper: [class: "form-group custom-control custom-checkbox"],
