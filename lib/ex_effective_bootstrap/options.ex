@@ -6,13 +6,13 @@ defmodule ExEffectiveBootstrap.Options do
             required: nil,
             wrapper: [class: "form-group"],
             label: [],
-            input: [class: "form-control"],
+            hint: [class: "form-text text-muted"],
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
-            hint: [class: "form-text text-muted"],
             prepend: [class: "input-group-text"],
             append: [class: "input-group-text"],
-            input_group: [class: "input-group"]
+            input_group: [class: "input-group"],
+            input: [class: "form-control"]
 
   def form_options(form, opts \\ []) do
     default = [
@@ -84,7 +84,7 @@ defmodule ExEffectiveBootstrap.Options do
     Map.put(options, :input, merge(options.input, merged_opts))
   end
 
-  defp update(options, key, form, field, opts \\ []) do
+  defp update(options, key, form, field, opts) do
     put(options, key, opts[key], form, field)
   end
 
@@ -95,7 +95,7 @@ defmodule ExEffectiveBootstrap.Options do
     put(options, key, [text: value], form, field)
   end
 
-  defp put(options, :wrapper, opts, form, field) do
+  defp put(options, :wrapper, opts, _, _) do
     Map.put(options, :wrapper, merge(options[:wrapper], opts))
   end
 
@@ -123,7 +123,7 @@ defmodule ExEffectiveBootstrap.Options do
     Map.put(options, :invalid, merge(options[:invalid], opts))
   end
 
-  defp put(options, :prepend, opts, form, field) do
+  defp put(options, :prepend, opts, _, _) do
     if options[:prepend][:text] || opts[:text] do
       Map.put(options, :prepend, merge(options[:prepend], opts))
     else
@@ -131,7 +131,7 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
-  defp put(options, :append, opts, form, field) do
+  defp put(options, :append, opts, _, _) do
     if options[:append][:text] || opts[:text] do
       Map.put(options, :append, merge(options[:append], opts))
     else
@@ -139,7 +139,7 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
-  defp put(options, :input_group, opts, form, field) do
+  defp put(options, :input_group, opts, _, _) do
     if options[:prepend] || options[:append] do
       Map.put(options, :input_group, merge(options[:input_group], opts))
     else
@@ -157,7 +157,7 @@ defmodule ExEffectiveBootstrap.Options do
   defp input_with_errors(form, field) do
     cond do
       !with_errors?(form) -> []
-      form.source.errors[field] -> [class: "is-invalid"]
+      form.errors[field] -> [class: "is-invalid"]
       true -> [class: "is-valid"]
     end
   end
@@ -168,10 +168,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   # submitted with errors
   defp with_errors?(%Phoenix.HTML.Form{source: source}), do: with_errors?(source)
-
-  defp with_errors?(%Ecto.Changeset{} = source) do
-    !source.valid? && map_size(source.changes) > 0
-  end
+  defp with_errors?(%Ecto.Changeset{} = source), do: !is_nil(source.action)
 
   defp merge_class(options, nil, nil), do: options
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
