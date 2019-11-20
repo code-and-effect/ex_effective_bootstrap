@@ -35,11 +35,12 @@ defmodule ExEffectiveBootstrap.Options do
       opts[:as] -> opts[:as]
       opts[:select] -> :select
       opts[:multiple_select] -> :multiple_select
+      String.contains?("#{field}", "phone") -> :tel
       true ->
         suggested = Form.input_type(form, field)
         case suggested do
           :date_select -> :date_input
-          _ -> suggested
+           _ -> suggested
         end
     end
   end
