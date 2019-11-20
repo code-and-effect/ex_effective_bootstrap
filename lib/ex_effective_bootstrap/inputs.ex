@@ -26,22 +26,23 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   def effective_input(form, :file_input, field, opts) do
-    %Options{ input: [class: "custom-file-input"] } |> to_html(form, field, opts)
+    %Options{input: [class: "custom-file-input"]} |> to_html(form, field, opts)
   end
 
   def effective_input(form, :select, field, opts) do
-    %Options{input: [class: "custom-select"] } |> to_html(form, field, opts)
+    %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
   end
 
   def effective_input(form, :multiple_select, field, opts) do
-    %Options{input: [class: "custom-select"] } |> to_html(form, field, opts)
+    %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
   end
 
   def effective_input(form, :tel, field, opts) do
     %Options{
       input: [class: "form-control", placeholder: "(555) 555-5555"],
       prepend: [text: Icons.icon("phone"), class: "input-group-text"]
-    } |> to_html(form, field, opts)
+    }
+    |> to_html(form, field, opts)
   end
 
   def effective_input(form, :text_input, field, opts) do
@@ -72,7 +73,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     content_tag :div, options.wrapper do
       [
         tags.label,
-        content_tag :div, [class: "custom-file"] do
+        content_tag :div, class: "custom-file" do
           [tags.input, file_label, tags.valid, tags.invalid, tags.hint]
         end
       ]

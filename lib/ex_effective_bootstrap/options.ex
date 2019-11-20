@@ -31,16 +31,27 @@ defmodule ExEffectiveBootstrap.Options do
 
   def input_type(form, field, opts \\ []) do
     cond do
-      opts[:type] -> opts[:type]
-      opts[:as] -> opts[:as]
-      opts[:select] -> :select
-      opts[:multiple_select] -> :multiple_select
-      String.contains?("#{field}", "phone") -> :tel
+      opts[:type] ->
+        opts[:type]
+
+      opts[:as] ->
+        opts[:as]
+
+      opts[:select] ->
+        :select
+
+      opts[:multiple_select] ->
+        :multiple_select
+
+      String.contains?("#{field}", "phone") ->
+        :tel
+
       true ->
         suggested = Form.input_type(form, field)
+
         case suggested do
           :date_select -> :date_input
-           _ -> suggested
+          _ -> suggested
         end
     end
   end
@@ -89,7 +100,21 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update(options, :input, form, field, opts) do
-    drop = [:label, :as, :input, :type, :valid, :invalid, :wrapper, :hint, :prepend, :append, :select, :multiple_select]
+    drop = [
+      :label,
+      :as,
+      :input,
+      :type,
+      :valid,
+      :invalid,
+      :wrapper,
+      :hint,
+      :prepend,
+      :append,
+      :select,
+      :multiple_select
+    ]
+
     opts = merge(opts[:input], Keyword.drop(opts, drop))
 
     validations = Form.input_validations(form, field)
