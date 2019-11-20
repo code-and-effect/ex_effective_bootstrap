@@ -15,6 +15,21 @@ defmodule ExEffectiveBootstrap.Options do
             input_group: [class: "input-group"],
             input: [class: "form-control"]
 
+  @type t :: %__MODULE__{
+    type: atom | nil,
+    required: boolean() | nil,
+    select_options: any | nil,
+    wrapper: Keyword.t(),
+    label: Keyword.t(),
+    hint: Keyword.t(),
+    valid: Keyword.t(),
+    invalid: Keyword.t(),
+    prepend: Keyword.t(),
+    append: Keyword.t(),
+    input_group: Keyword.t(),
+    input: Keyword.t()
+  }
+
   def form_options(form, opts \\ []) do
     default = [
       class: "effective-form needs-validation",
@@ -81,7 +96,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update(options, :select_options, _form, _field, opts) do
-    if opts[:select] || opts[:multiple_select] do
+    if options[:type] == :select || options[:type] == :multiple_select do
       Map.put(options, :select_options, opts[:select] || opts[:multiple_select])
     else
       Map.put(options, :select_options, false)

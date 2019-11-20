@@ -11,6 +11,16 @@ defmodule ExEffectiveBootstrap.Tags do
             prepend: nil,
             append: nil
 
+  @type t :: %__MODULE__{
+    label: nil,
+    input: nil,
+    valid: nil,
+    invalid: nil,
+    hint: nil,
+    prepend: nil,
+    append: nil
+  }
+
   def build(%Options{} = options, form, field) do
     tags = %__MODULE__{
       label: label(options.label) || [],
