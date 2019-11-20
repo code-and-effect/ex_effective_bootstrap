@@ -37,10 +37,6 @@ defmodule ExEffectiveBootstrap.Tags do
     apply(Form, options.type, [form, field, options.select_options, options.input])
   end
 
-  defp input(form, field, %Options{type: :tel} = options) do
-    apply(Form, :text_input, [form, field, options.input ++ [type: :tel]])
-  end
-
   defp input(form, field, options) do
     apply(Form, options.type, [form, field, options.input])
   end

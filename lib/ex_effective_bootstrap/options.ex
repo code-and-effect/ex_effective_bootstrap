@@ -44,7 +44,7 @@ defmodule ExEffectiveBootstrap.Options do
         :multiple_select
 
       String.contains?("#{field}", "phone") ->
-        :tel
+        :telephone_input
 
       true ->
         suggested = Form.input_type(form, field)
@@ -80,7 +80,7 @@ defmodule ExEffectiveBootstrap.Options do
     Map.put(options, :type, input_type(form, field, opts))
   end
 
-  defp update(options, :select_options, form, field, opts) do
+  defp update(options, :select_options, _form, _field, opts) do
     if opts[:select] || opts[:multiple_select] do
       Map.put(options, :select_options, opts[:select] || opts[:multiple_select])
     else

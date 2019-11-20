@@ -43,16 +43,11 @@ defmodule ExEffectiveBootstrap.Feedback do
   defp validation(:maxlength, _), do: []
   defp validation(unknown, opts), do: ["unknown validation #{unknown} #{opts}"]
 
-  defp feedbacks(form, field, options) do
+  defp feedbacks(_form, _field, options) do
     feedback(options.type)
   end
 
   defp feedback(:email_input), do: ["must be an email"]
-  defp feedback(:tel), do: ["must be a phone number"]
-  defp feedback(:password_input), do: []
-  defp feedback(:text_input), do: []
-  defp feedback(:checkbox), do: []
-  defp feedback(:multiple_select), do: []
-  defp feedback(:textarea), do: []
-  defp feedback(unknown), do: []
+  defp feedback(:telephone_input), do: ["must be a phone number"]
+  defp feedback(_), do: []
 end

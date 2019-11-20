@@ -37,7 +37,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
   end
 
-  def effective_input(form, :tel, field, opts) do
+  def effective_input(form, :telephone_input, field, opts) do
     %Options{
       input: [class: "form-control", placeholder: "(555) 555-5555"],
       prepend: [text: Icons.icon("phone"), class: "input-group-text"]
@@ -49,7 +49,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     %Options{} |> to_html(form, field, opts)
   end
 
-  def effective_input(form, type, field, opts) do
+  def effective_input(form, _type, field, opts) do
     %Options{} |> to_html(form, field, opts)
   end
 
