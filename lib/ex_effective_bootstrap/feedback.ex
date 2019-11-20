@@ -1,4 +1,5 @@
 defmodule ExEffectiveBootstrap.Feedback do
+  @moduledoc "Used by Options to generate the valid and invalid feedback"
   alias Phoenix.HTML.Form
 
   @valid "Look's good!"
