@@ -94,3 +94,5 @@ npm run start
 
 
 https://fontawesome.com/icons?d=gallery&s=solid
+
+mix hex.publish

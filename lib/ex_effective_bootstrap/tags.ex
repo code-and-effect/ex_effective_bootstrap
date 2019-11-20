@@ -25,8 +25,20 @@ defmodule ExEffectiveBootstrap.Tags do
     {tags, options}
   end
 
-  defp label(options) do
+  def label(options) do
     if options, do: content_tag(:label, options[:text], Keyword.delete(options, :text))
+  end
+
+  defp input(form, field, %Options{type: :select} = options) do
+    apply(Form, options.type, [form, field, options.select_options, options.input])
+  end
+
+  defp input(form, field, %Options{type: :multiple_select} = options) do
+    apply(Form, options.type, [form, field, options.select_options, options.input])
+  end
+
+  defp input(form, field, %Options{type: :tel} = options) do
+    apply(Form, :text_input, [form, field, options.input ++ [type: :tel]])
   end
 
   defp input(form, field, options) do

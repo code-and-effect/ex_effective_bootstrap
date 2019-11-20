@@ -48,7 +48,11 @@ defmodule ExEffectiveBootstrap.Feedback do
   end
 
   defp feedback(:email_input), do: ["must be an email"]
+  defp feedback(:tel), do: ["must be a phone number"]
   defp feedback(:password_input), do: []
+  defp feedback(:text_input), do: []
   defp feedback(:checkbox), do: []
-  defp feedback(unknown), do: ["unknown feedback #{unknown}"]
+  defp feedback(:multiple_select), do: []
+  defp feedback(:textarea), do: []
+  defp feedback(unknown), do: []
 end

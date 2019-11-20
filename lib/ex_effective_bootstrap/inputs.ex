@@ -1,7 +1,6 @@
 defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
   alias ExEffectiveBootstrap.{Icons, Tags, Options}
-  alias Phoenix.HTML.Form
 
   def input(form, field, opts \\ []) do
     effective_input(form, Options.input_type(form, field, opts), field, opts)
@@ -26,7 +25,30 @@ defmodule ExEffectiveBootstrap.Inputs do
     |> to_html(form, field, opts)
   end
 
-  def effective_input(form, _type, field, opts) do
+  def effective_input(form, :file_input, field, opts) do
+    %Options{ input: [class: "custom-file-input"] } |> to_html(form, field, opts)
+  end
+
+  def effective_input(form, :select, field, opts) do
+    %Options{input: [class: "custom-select"] } |> to_html(form, field, opts)
+  end
+
+  def effective_input(form, :multiple_select, field, opts) do
+    %Options{input: [class: "custom-select"] } |> to_html(form, field, opts)
+  end
+
+  def effective_input(form, :tel, field, opts) do
+    %Options{
+      input: [class: "form-control", placeholder: "(555) 555-5555"],
+      prepend: [text: Icons.icon("phone"), class: "input-group-text"]
+    } |> to_html(form, field, opts)
+  end
+
+  def effective_input(form, :text_input, field, opts) do
+    %Options{} |> to_html(form, field, opts)
+  end
+
+  def effective_input(form, type, field, opts) do
     %Options{} |> to_html(form, field, opts)
   end
 
@@ -43,6 +65,25 @@ defmodule ExEffectiveBootstrap.Inputs do
       [tags.input, tags.label, tags.valid, tags.invalid, tags.hint]
     end
   end
+
+  defp to_html({%Tags{} = tags, %Options{type: :file_input} = options}) do
+    file_label = Tags.label(text: "Choose file...", class: "custom-file-label")
+
+    content_tag :div, options.wrapper do
+      [
+        tags.label,
+        content_tag :div, [class: "custom-file"] do
+          [tags.input, file_label, tags.valid, tags.invalid, tags.hint]
+        end
+      ]
+    end
+  end
+
+  # defp to_html({%Tags{} = tags, %Options{type: :select} = options}) do
+  #   content_tag :div, options.wrapper do
+  #     [tags.label, tags.input, tags.valid, tags.invalid, tags.hint]
+  #   end
+  # end
 
   defp to_html({%Tags{} = tags, %Options{input_group: false} = options}) do
     content_tag :div, options.wrapper do

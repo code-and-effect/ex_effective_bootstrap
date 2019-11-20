@@ -4,6 +4,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   defstruct type: nil,
             required: nil,
+            select_options: nil,
             wrapper: [class: "form-group"],
             label: [],
             hint: [class: "form-text text-muted"],
@@ -29,7 +30,18 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   def input_type(form, field, opts \\ []) do
-    opts[:type] || opts[:as] || Form.input_type(form, field)
+    cond do
+      opts[:type] -> opts[:type]
+      opts[:as] -> opts[:as]
+      opts[:select] -> :select
+      opts[:multiple_select] -> :multiple_select
+      true ->
+        suggested = Form.input_type(form, field)
+        case suggested do
+          :date_select -> :date_input
+          _ -> suggested
+        end
+    end
   end
 
   def to_options(map), do: struct(__MODULE__, map)
@@ -39,6 +51,7 @@ defmodule ExEffectiveBootstrap.Options do
     Map.from_struct(options)
     |> update(:type, form, field, opts)
     |> update(:required, form, field, opts)
+    |> update(:select_options, form, field, opts)
     |> update(:wrapper, form, field, opts)
     |> update(:label, form, field, opts)
     |> update(:hint, form, field, opts)
@@ -55,6 +68,14 @@ defmodule ExEffectiveBootstrap.Options do
     Map.put(options, :type, input_type(form, field, opts))
   end
 
+  defp update(options, :select_options, form, field, opts) do
+    if opts[:select] || opts[:multiple_select] do
+      Map.put(options, :select_options, opts[:select] || opts[:multiple_select])
+    else
+      Map.put(options, :select_options, false)
+    end
+  end
+
   defp update(options, :required, form, field, opts) do
     required =
       cond do
@@ -67,7 +88,7 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update(options, :input, form, field, opts) do
-    drop = [:label, :as, :input, :type, :valid, :invalid, :wrapper, :hint, :prepend, :append]
+    drop = [:label, :as, :input, :type, :valid, :invalid, :wrapper, :hint, :prepend, :append, :select, :multiple_select]
     opts = merge(opts[:input], Keyword.drop(opts, drop))
 
     validations = Form.input_validations(form, field)
