@@ -1,8 +1,10 @@
 defmodule ExEffectiveBootstrap.Submit do
+  @moduledoc "The submit button for an effective_form"
   use Phoenix.HTML
   alias ExEffectiveBootstrap.{Icons, Options}
   alias Phoenix.HTML.Form
 
+  @spec effective_submit(any, Keyword.t()) :: Phoenix.HTML.Safe.t()
   def effective_submit(value \\ "Save", opts \\ []) do
     defaults = [
       class: "effective-submit",
