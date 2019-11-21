@@ -13,14 +13,14 @@ defmodule ExEffectiveBootstrap.Tags do
             append: nil
 
   @type t :: %__MODULE__{
-    label: Phoenix.HTML.Safe.t() | nil,
-    input: Phoenix.HTML.Safe.t() | nil,
-    valid: Phoenix.HTML.Safe.t() | nil,
-    invalid: Phoenix.HTML.Safe.t() | nil,
-    hint: Phoenix.HTML.Safe.t() | nil,
-    prepend: Phoenix.HTML.Safe.t() | nil,
-    append: Phoenix.HTML.Safe.t() | nil,
-  }
+          label: Phoenix.HTML.Safe.t() | nil,
+          input: Phoenix.HTML.Safe.t() | nil,
+          valid: Phoenix.HTML.Safe.t() | nil,
+          invalid: Phoenix.HTML.Safe.t() | nil,
+          hint: Phoenix.HTML.Safe.t() | nil,
+          prepend: Phoenix.HTML.Safe.t() | nil,
+          append: Phoenix.HTML.Safe.t() | nil
+        }
 
   @spec build(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.Form.t(), atom) ::
           {ExEffectiveBootstrap.Tags.t(), ExEffectiveBootstrap.Options.t()}

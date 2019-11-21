@@ -17,19 +17,19 @@ defmodule ExEffectiveBootstrap.Options do
             input_group: [class: "input-group"]
 
   @type t :: %__MODULE__{
-    type: atom | nil,
-    required: boolean() | nil,
-    select_options: any | nil,
-    wrapper: Keyword.t(),
-    input: Keyword.t(),
-    label: Keyword.t() | false,
-    hint: Keyword.t() | false,
-    valid: Keyword.t() | false,
-    invalid: Keyword.t() | false,
-    prepend: Keyword.t() | false,
-    append: Keyword.t() | false,
-    input_group: Keyword.t() | false
-  }
+          type: atom | nil,
+          required: boolean() | nil,
+          select_options: any | nil,
+          wrapper: Keyword.t(),
+          input: Keyword.t(),
+          label: Keyword.t() | false,
+          hint: Keyword.t() | false,
+          valid: Keyword.t() | false,
+          invalid: Keyword.t() | false,
+          prepend: Keyword.t() | false,
+          append: Keyword.t() | false,
+          input_group: Keyword.t() | false
+        }
 
   @spec form_options(Phoenix.HTML.Form.t(), Keyword.t()) :: Keyword.t()
   def form_options(form, opts \\ []) do
