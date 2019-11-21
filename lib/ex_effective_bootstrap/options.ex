@@ -180,12 +180,12 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp put(options, :valid, opts, form, field) do
-    opts = [text: Feedback.valid(form, field, options)] |> merge(opts)
+    opts = [text: Feedback.valid(options, form, field)] |> merge(opts)
     Map.put(options, :valid, merge(options[:valid], opts))
   end
 
   defp put(options, :invalid, opts, form, field) do
-    opts = [text: Feedback.invalid(form, field, options)] |> merge(opts)
+    opts = [text: Feedback.invalid(options, form, field)] |> merge(opts)
     Map.put(options, :invalid, merge(options[:invalid], opts))
   end
 

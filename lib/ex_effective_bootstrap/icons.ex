@@ -1,10 +1,16 @@
 defmodule ExEffectiveBootstrap.Icons do
+  @moduledoc """
+  Use Feather and FontAwesome svg icons in your views"
+
+  = icon(:check)
+  """
   alias ExEffectiveBootstrap.Options
 
   @svg_path "deps/ex_effective_bootstrap/priv/icons"
 
   # icon(:check, class: 'big-4')
   # icon('check', class: 'small-3')
+  @spec icon(atom | String.t(), Keyword.t()) :: Phoenix.HTML.Safe.t()
   def icon(svg, opts \\ []) do
     opts =
       opts

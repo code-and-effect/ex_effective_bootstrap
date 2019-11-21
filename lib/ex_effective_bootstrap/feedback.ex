@@ -2,12 +2,14 @@ defmodule ExEffectiveBootstrap.Feedback do
   @moduledoc "Used by Options to generate the valid and invalid feedback"
   alias Phoenix.HTML.Form
 
-  @valid "Look's good!"
-  @invalid "is invalid"
+  @valid {:safe, "Look's good!"}
+  @invalid {:safe, "is invalid"}
 
-  def valid(_form, _field, _options), do: @valid
+  @spec valid(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.FormData.t(), atom) :: Phoenix.HTML.Safe.t()
+  def valid(_options, _form, _field), do: @valid
 
-  def invalid(form, field, options) do
+  @spec invalid(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.FormData.t(), atom) :: Phoenix.HTML.Safe.t()
+  def invalid(options, form, field) do
     error = errors(form, field)
     validation = validations(form, field, options)
     feedback = feedbacks(form, field, options)
@@ -18,7 +20,7 @@ defmodule ExEffectiveBootstrap.Feedback do
   defp invalid_text(messages) when length(messages) == 0, do: @invalid
 
   defp invalid_text(messages) do
-    messages |> List.flatten() |> Enum.uniq() |> Enum.join(" and ")
+    {:safe, messages |> List.flatten() |> Enum.uniq() |> Enum.join(" and ")}
   end
 
   defp errors(form, field) do
