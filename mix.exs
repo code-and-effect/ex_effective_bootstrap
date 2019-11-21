@@ -30,7 +30,10 @@ defmodule ExEffectiveBootstrap.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.3.0 or ~> 1.4.0"},
-      {:phoenix_html, "~> 2.11"}
+      {:phoenix_html, "~> 2.11"},
+      {:jason, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:ecto, "~> 2.2 or ~> 3.0"}
     ]
   end
 
