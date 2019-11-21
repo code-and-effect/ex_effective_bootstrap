@@ -58,9 +58,9 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   # build_and_render
-  defp to_html(%Options{} = options, form, field, opts \\ []) do
+  defp to_html(%Options{} = options, form, field, opts) do
     options
-    |> Options.build(form, field, opts)
+    |> Options.build(form, field, opts || [])
     |> Tags.build(form, field)
     |> to_html()
   end
@@ -84,7 +84,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     end
   end
 
-  # defp to_html({%Tags{} = tags, %Options{type: :select} = options}) do
+  # defp to_html({%Tags{} = tags, %Options{type: :new_input} = options}) do
   #   content_tag :div, options.wrapper do
   #     [tags.label, tags.input, tags.valid, tags.invalid, tags.hint]
   #   end
