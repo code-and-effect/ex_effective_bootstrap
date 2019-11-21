@@ -1,4 +1,5 @@
 defmodule ExEffectiveBootstrap.Options do
+  @moduledoc "Normalizes and initializes all passed options"
   alias ExEffectiveBootstrap.Feedback
   alias Phoenix.HTML.Form
 
@@ -6,30 +7,31 @@ defmodule ExEffectiveBootstrap.Options do
             required: nil,
             select_options: nil,
             wrapper: [class: "form-group"],
+            input: [class: "form-control"],
             label: [],
             hint: [class: "form-text text-muted"],
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
             prepend: [class: "input-group-text"],
             append: [class: "input-group-text"],
-            input_group: [class: "input-group"],
-            input: [class: "form-control"]
+            input_group: [class: "input-group"]
 
   @type t :: %__MODULE__{
     type: atom | nil,
     required: boolean() | nil,
     select_options: any | nil,
     wrapper: Keyword.t(),
-    label: Keyword.t(),
-    hint: Keyword.t(),
-    valid: Keyword.t(),
-    invalid: Keyword.t(),
-    prepend: Keyword.t(),
-    append: Keyword.t(),
-    input_group: Keyword.t(),
-    input: Keyword.t()
+    input: Keyword.t(),
+    label: Keyword.t() | false,
+    hint: Keyword.t() | false,
+    valid: Keyword.t() | false,
+    invalid: Keyword.t() | false,
+    prepend: Keyword.t() | false,
+    append: Keyword.t() | false,
+    input_group: Keyword.t() | false
   }
 
+  @spec form_options(any, Keyword.t()) :: Keyword.t()
   def form_options(form, opts \\ []) do
     default = [
       class: "effective-form needs-validation",
@@ -44,6 +46,7 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(opts)
   end
 
+  @spec input_type(any, atom, Keyword.t()) :: atom
   def input_type(form, field, opts \\ []) do
     cond do
       opts[:type] ->
@@ -71,9 +74,10 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
+  @spec to_options(Map.t()) :: t()
   def to_options(map), do: struct(__MODULE__, map)
 
-  @spec build(ExEffectiveBootstrap.Options.t(), any, any, nil | keyword | map) :: any
+  @spec build(t(), any, atom, Keyword.t()) :: t()
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     Map.from_struct(options)
     |> update(:type, form, field, opts)
@@ -209,6 +213,7 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
+  @spec merge(Keyword.t() | nil, Keyword.t() | nil) :: Keyword.t()
   def merge(nil, opts) when is_list(opts), do: opts
   def merge(options, nil) when is_list(options), do: options
 

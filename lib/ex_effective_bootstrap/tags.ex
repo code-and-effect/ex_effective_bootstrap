@@ -1,4 +1,5 @@
 defmodule ExEffectiveBootstrap.Tags do
+  @moduledoc "Renders the html tags for each component"
   alias ExEffectiveBootstrap.Options
   alias Phoenix.HTML.Form
   import Phoenix.HTML.Tag, only: [content_tag: 3]
@@ -12,15 +13,17 @@ defmodule ExEffectiveBootstrap.Tags do
             append: nil
 
   @type t :: %__MODULE__{
-    label: nil,
-    input: nil,
-    valid: nil,
-    invalid: nil,
-    hint: nil,
-    prepend: nil,
-    append: nil
+    label: Phoenix.HTML.Safe.t() | nil,
+    input: Phoenix.HTML.Safe.t() | nil,
+    valid: Phoenix.HTML.Safe.t() | nil,
+    invalid: Phoenix.HTML.Safe.t() | nil,
+    hint: Phoenix.HTML.Safe.t() | nil,
+    prepend: Phoenix.HTML.Safe.t() | nil,
+    append: Phoenix.HTML.Safe.t() | nil,
   }
 
+  @spec build(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.Form.t(), atom) ::
+          {ExEffectiveBootstrap.Tags.t(), ExEffectiveBootstrap.Options.t()}
   def build(%Options{} = options, form, field) do
     tags = %__MODULE__{
       label: label(options.label) || [],
@@ -35,6 +38,7 @@ defmodule ExEffectiveBootstrap.Tags do
     {tags, options}
   end
 
+  @spec label(ExEffectiveBootstrap.Options.t()) :: Phoenix.HTML.Safe.t() | nil
   def label(options) do
     if options, do: content_tag(:label, options[:text], Keyword.delete(options, :text))
   end
