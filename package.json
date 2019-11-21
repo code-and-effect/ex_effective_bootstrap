@@ -18,6 +18,7 @@
     "README.md",
     "package.json",
     "priv/static/ex_effective_bootstrap.js",
-    "priv/static/ex_effective_bootstrap.css"
+    "priv/static/ex_effective_bootstrap.css",
+    "priv/static/icons"
   ]
 }

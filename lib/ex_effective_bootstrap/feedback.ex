@@ -5,9 +5,11 @@ defmodule ExEffectiveBootstrap.Feedback do
   @valid {:safe, "Look's good!"}
   @invalid {:safe, "is invalid"}
 
+  @doc "The message for a valid input"
   @spec valid(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.FormData.t(), atom) :: Phoenix.HTML.Safe.t()
   def valid(_options, _form, _field), do: @valid
 
+  @doc "The message for an invalid input"
   @spec invalid(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.FormData.t(), atom) :: Phoenix.HTML.Safe.t()
   def invalid(options, form, field) do
     error = errors(form, field)

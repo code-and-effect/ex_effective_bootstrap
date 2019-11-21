@@ -3,6 +3,8 @@ export default class EffectiveForm {
     this.currentSubmit = '';
   }
 
+  version() { return "0.1.0"; }
+
   onSubmitClick(input) {
     this.currentSubmit = $(input);
     return true;
