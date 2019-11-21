@@ -1,6 +1,8 @@
+"use strict";
+
 export default class EffectiveForm {
   constructor() {
-    this.currentSubmit = '';
+    this.currentSubmit = "";
   }
 
   version() { return "0.1.0"; }
