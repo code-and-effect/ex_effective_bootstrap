@@ -9,6 +9,7 @@ defmodule ExEffectiveBootstrap.Options do
             wrapper: [class: "form-group"],
             input: [class: "form-control"],
             label: [],
+            javascript: [],
             hint: [class: "form-text text-muted"],
             valid: [class: "valid-feedback"],
             invalid: [class: "invalid-feedback"],
@@ -23,6 +24,7 @@ defmodule ExEffectiveBootstrap.Options do
           wrapper: Keyword.t(),
           input: Keyword.t(),
           label: Keyword.t() | false,
+          javascript: Keyword.t() | false,
           hint: Keyword.t() | false,
           valid: Keyword.t() | false,
           invalid: Keyword.t() | false,
@@ -85,6 +87,7 @@ defmodule ExEffectiveBootstrap.Options do
     |> update(:select_options, form, field, opts)
     |> update(:wrapper, form, field, opts)
     |> update(:label, form, field, opts)
+    |> update(:javascript, form, field, opts)
     |> update(:hint, form, field, opts)
     |> update(:valid, form, field, opts)
     |> update(:invalid, form, field, opts)
@@ -121,6 +124,7 @@ defmodule ExEffectiveBootstrap.Options do
   defp update(options, :input, form, field, opts) do
     drop = [
       :label,
+      :javascript,
       :as,
       :input,
       :type,
@@ -138,16 +142,18 @@ defmodule ExEffectiveBootstrap.Options do
 
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors(form, field)
-    with_hint = if options.hint, do: input_with_hint(form, field)
+    with_hint = input_with_hint(options, form, field)
+    with_js = input_with_javascript(options)
 
     merged_opts =
       []
       |> merge(validations)
       |> merge(with_errors)
       |> merge(with_hint)
+      |> merge(with_js)
       |> merge(opts)
 
-    Map.put(options, :input, merge(options.input, merged_opts))
+    Map.put(options, :input, merge(options.input, merged_opts)) |> IO.inspect()
   end
 
   defp update(options, key, form, field, opts) do
@@ -168,6 +174,10 @@ defmodule ExEffectiveBootstrap.Options do
   defp put(options, :label, opts, form, field) do
     opts = [text: Form.humanize(field), for: Form.input_id(form, field)] |> merge(opts)
     Map.put(options, :label, merge(options[:label], opts))
+  end
+
+  defp put(options, :javascript, opts, _, _) do
+    Map.put(options, :javascript, merge(options[:javascript], opts))
   end
 
   defp put(options, :hint, opts, form, field) do
@@ -229,8 +239,22 @@ defmodule ExEffectiveBootstrap.Options do
     end
   end
 
-  defp input_with_hint(form, field) do
-    ["aria-describedby": "#{Form.input_id(form, field)}_hint"]
+  defp input_with_hint(options, form, field) do
+    if options.hint do
+      ["aria-describedby": "#{Form.input_id(form, field)}_hint"]
+    end
+  end
+
+  defp input_with_javascript(options) do
+    if options.javascript && length(options.javascript) > 0 do
+      json =
+        options.javascript
+        |> Enum.into(%{}, fn { k, v } -> {k, v} end)
+        |> Map.merge(%{method_name: options.type})
+        |> Jason.encode!
+
+      ["data-input-js-options": json]
+    end
   end
 
   # submitted with errors
