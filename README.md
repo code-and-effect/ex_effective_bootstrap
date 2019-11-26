@@ -11,7 +11,7 @@ Add `ex_effective_bootstrap` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_effective_bootstrap, "~> 0.1.1"}
+    {:ex_effective_bootstrap, "~> 0.1.2"}
   ]
 end
 ```
@@ -61,7 +61,7 @@ console.log($.fn.jquery)
 "3.4.1"
 
 console.log(EffectiveForm.version())
-"0.1.1"
+"0.1.2"
 ```
 
 Add to your `app.scss`:
