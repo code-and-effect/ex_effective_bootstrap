@@ -3,7 +3,6 @@ defmodule ExEffectiveBootstrap.Validate do
   import Ecto.Changeset
 
   @doc "Validate a string field is a telephone number format matches (444) 444-4444 x12345"
-  @spec telephone(Ecto.Changeset.t(), atom) :: Ecto.Changeset.t()
   def telephone(%Ecto.Changeset{} = changeset, key) do
     with phone_number <- get_field(changeset, key),
          false <- is_nil(phone_number),
