@@ -25,7 +25,13 @@ export default class EffectiveForm {
     $form.removeClass('form-is-invalid');
 
     this.disable($form);
-    this.flashSuccess();
+
+    if($form.attr('phx-submit')) {
+      this.flashLiveViewSuccess();
+    } else {
+      this.flashSuccess();
+    }
+
     return true;
   }
 
@@ -70,6 +76,10 @@ export default class EffectiveForm {
 
   flashSuccess() {
     this.flash('form-success', 1000, function () { window.EffectiveForm.flashSpin(); })
+  }
+
+  flashLiveViewSuccess() {
+    this.flash('form-success', 0, function () { window.EffectiveForm.flash('form-success'); })
   }
 
   flashError() { this.flash('form-error', 1000) }
