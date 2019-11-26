@@ -155,6 +155,21 @@ Unfortunately, Bootstrap 4 dropped support for glyphicons, so we package a combi
 
 [List of all available icons](https://github.com/code-and-effect/ex_effective_bootstrap/tree/master/priv/icons)
 
+## Validators
+
+These all work on an Ecto Schema changeset.
+
+```
+alias ExEffectiveBootstrap.Validate
+
+def changeset(post, params \\ %{}) do
+  post
+  |> cast(params, [:name, :phone])
+  |> validate_required([:name])
+  |> Validate.telephone(:phone)
+end
+```
+
 ## View Helpers
 
 Coming soon.
