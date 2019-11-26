@@ -153,7 +153,7 @@ defmodule ExEffectiveBootstrap.Options do
       |> merge(with_js)
       |> merge(opts)
 
-    Map.put(options, :input, merge(options.input, merged_opts)) |> IO.inspect()
+    Map.put(options, :input, merge(options.input, merged_opts))
   end
 
   defp update(options, key, form, field, opts) do

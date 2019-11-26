@@ -48,6 +48,9 @@ defmodule ExEffectiveBootstrap.Feedback do
   defp validation(:required, _), do: []
   defp validation(:minlength, count), do: ["should be at least #{count} character(s)"]
   defp validation(:maxlength, _), do: []
+  defp validation(:step, _), do: []
+  defp validation(:min, min), do: ["minimum value is #{min}"]
+  defp validation(:max, max), do: ["maximum value is #{max}"]
   defp validation(unknown, opts), do: ["unknown validation #{unknown} #{opts}"]
 
   defp feedbacks(_form, _field, options) do
@@ -55,6 +58,6 @@ defmodule ExEffectiveBootstrap.Feedback do
   end
 
   defp feedback(:email_input), do: ["must be an email"]
-  defp feedback(:telephone_input), do: ["must be a phone number"]
+  defp feedback(:telephone_input), do: ["must be a 10-digit phone number"]
   defp feedback(_), do: []
 end
