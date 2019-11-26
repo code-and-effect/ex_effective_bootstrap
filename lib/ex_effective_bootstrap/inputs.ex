@@ -44,6 +44,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   def effective_input(form, :telephone_input, field, opts) do
     %Options{
       input: [class: "form-control", placeholder: "(555) 555-5555"],
+      javascript: [mask: "(999) 999-9999? x99999", placeholder: "_"],
       prepend: [text: Icons.icon("phone"), class: "input-group-text"]
     }
     |> to_html(form, field, opts)
