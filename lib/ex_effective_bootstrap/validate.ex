@@ -1,5 +1,5 @@
 defmodule ExEffectiveBootstrap.Validate do
-  @moduleduc "validate your Ecto changeset"
+  @moduledoc "validate your Ecto changeset"
   import Ecto.Changeset
 
   @doc "Validate a string field is a telephone number format matches (444) 444-4444 x12345"
