@@ -60,8 +60,8 @@ Sanity check the javascript is working in the browser console:
 console.log($.fn.jquery)
 "3.4.1"
 
-console.log(EffectiveForm.version())
-"0.1.2"
+console.log(EffectiveForm.good())
+"you good"
 ```
 
 Add to your `app.scss`:
