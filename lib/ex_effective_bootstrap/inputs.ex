@@ -30,11 +30,11 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   def effective_input(form, :select, field, opts) do
-    %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
+    %Options{javascript: []} |> to_html(form, field, opts)
   end
 
   def effective_input(form, :multiple_select, field, opts) do
-    %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
+    %Options{javascript: [method_name: :select]} |> to_html(form, field, opts)
   end
 
   def effective_input(form, :telephone_input, field, opts) do

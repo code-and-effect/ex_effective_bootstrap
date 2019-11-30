@@ -10,5 +10,7 @@ export default class Select {
 $.fn.selectpicker.Constructor.BootstrapVersion = '4';
 
 $(document).on('change', 'select.initialized', function(event) {
-  window.EffectiveForm.validateSelect($(event.currentTarget));
+  if($(event.currentTarget).closest('form').hasClass('was-validated')) {
+    window.EffectiveForm.validateSelect($(event.currentTarget));
+  }
 });
