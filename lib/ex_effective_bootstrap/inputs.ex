@@ -29,10 +29,6 @@ defmodule ExEffectiveBootstrap.Inputs do
     |> to_html(form, field, opts)
   end
 
-  def effective_input(form, :file_input, field, opts) do
-    %Options{input: [class: "custom-file-input"]} |> to_html(form, field, opts)
-  end
-
   def effective_input(form, :select, field, opts) do
     %Options{input: [class: "custom-select"]} |> to_html(form, field, opts)
   end
@@ -69,19 +65,6 @@ defmodule ExEffectiveBootstrap.Inputs do
   defp to_html({%Tags{} = tags, %Options{type: :checkbox} = options}) do
     content_tag :div, options.wrapper do
       [tags.input, tags.label, tags.valid, tags.invalid, tags.hint]
-    end
-  end
-
-  defp to_html({%Tags{} = tags, %Options{type: :file_input} = options}) do
-    file_label = Tags.label(text: "Choose file...", class: "custom-file-label")
-
-    content_tag :div, options.wrapper do
-      [
-        tags.label,
-        content_tag :div, class: "custom-file" do
-          [tags.input, file_label, tags.valid, tags.invalid, tags.hint]
-        end
-      ]
     end
   end
 
