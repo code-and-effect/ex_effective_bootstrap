@@ -1,8 +1,10 @@
 import $ from "jquery"
 import TelephoneInput from "./telephone_input/base"
+import Select from "./select/base"
 
 const effective_inputs = {
-  'telephone_input': TelephoneInput
+  'telephone_input': TelephoneInput,
+  'select': Select
 }
 
 export default class EffectiveBootstrap {

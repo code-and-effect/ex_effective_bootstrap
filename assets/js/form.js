@@ -35,12 +35,25 @@ export default class EffectiveForm {
     return true;
   }
 
+  // These controls need a little bit of help with client side validations
+  validateSelect($select) {
+    $select.each(function() {
+      if($(this).is('select:invalid')) {
+        $(this).closest('.bootstrap-select').addClass('is-invalid').removeClass('is-valid');
+      } else {
+        $(this).closest('.bootstrap-select').addClass('is-valid').removeClass('is-invalid');
+      }
+    });
+  }
+
   invalidate($form) {
     this.reset($form);
 
     $form.addClass('was-validated');
     $form.addClass('form-is-invalid');
     $form.find('.effective-current-submit').removeClass('.effective-current-submit');
+
+    this.validateSelect($form.find('select.initialized'));
 
     this.flashError();
     return true;
