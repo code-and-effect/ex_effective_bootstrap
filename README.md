@@ -60,7 +60,7 @@ Sanity check the javascript is working in the browser console:
 console.log($.fn.jquery)
 "3.4.1"
 
-console.log(EffectiveForm.good())
+console.log(EffectiveBootstrap.good())
 "you good"
 ```
 

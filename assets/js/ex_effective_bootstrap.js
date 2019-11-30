@@ -1,8 +1,9 @@
-/**
+/*!
  * --------------------------------------------------------------------------
  * ExEffectiveBootstrap
+ * https://github.com/code-and-effect/ex_effective_bootstrap/
  * --------------------------------------------------------------------------
- */
+*/
 
 import css from "../css/ex_effective_bootstrap.scss"
 

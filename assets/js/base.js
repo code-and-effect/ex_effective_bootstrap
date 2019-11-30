@@ -8,6 +8,8 @@ const effective_inputs = {
 }
 
 export default class EffectiveBootstrap {
+  good() { return "you good"; }
+
   initialize(target) {
     $(target || document).find('[data-input-js-options]:not(.initialized)').each(function(i, element) {
       let $element = $(element);
