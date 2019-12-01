@@ -260,6 +260,7 @@ defmodule ExEffectiveBootstrap.Options do
   # submitted with errors
   defp with_errors?(%Phoenix.HTML.Form{source: source}), do: with_errors?(source)
   defp with_errors?(%Ecto.Changeset{} = source), do: !is_nil(source.action)
+  defp with_errors?(_), do: false
 
   defp merge_class(options, nil, nil), do: options
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)

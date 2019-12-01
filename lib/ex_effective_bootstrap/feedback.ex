@@ -27,10 +27,12 @@ defmodule ExEffectiveBootstrap.Feedback do
     {:safe, messages |> List.flatten() |> Enum.uniq() |> Enum.join(" and ")}
   end
 
-  defp errors(form, field) do
+  defp errors(form = %Phoenix.HTML.Form{source: %Ecto.Changeset{}}, field) do
     Keyword.get_values(form.source.errors, field)
     |> Enum.map(fn {msg, opts} -> error(msg, opts) end)
   end
+
+  defp errors(_, _), do: []
 
   defp error(msg, opts) do
     Enum.reduce(opts, msg, fn {key, value}, acc ->
