@@ -22,7 +22,7 @@ defmodule ExEffectiveBootstrap.Tags do
           append: Phoenix.HTML.Safe.t() | nil
         }
 
-  @spec build(ExEffectiveBootstrap.Options.t(), any, atom) ::
+  @spec build(ExEffectiveBootstrap.Options.t(), Phoenix.HTML.Form.t() | atom, atom) ::
           {ExEffectiveBootstrap.Tags.t(), ExEffectiveBootstrap.Options.t()}
   def build(%Options{} = options, form, field) do
     tags = %__MODULE__{
