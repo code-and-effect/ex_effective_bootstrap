@@ -38,7 +38,8 @@ defmodule ExEffectiveBootstrap.Options do
     default = [
       class: "effective-form needs-validation",
       novalidate: true,
-      onsubmit: "return EffectiveForm.validate(this);"
+      onsubmit: "return EffectiveForm.validate(this);",
+      "phx-hook": "EffectiveForm"
     ]
 
     with_errors = if with_errors?(form), do: [class: "with-errors"]
