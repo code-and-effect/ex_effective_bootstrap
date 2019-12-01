@@ -33,7 +33,7 @@ defmodule ExEffectiveBootstrap.Options do
           input_group: Keyword.t() | false
         }
 
-  @spec form_options(Phoenix.HTML.Form.t(), Keyword.t()) :: Keyword.t()
+  @spec form_options(any, Keyword.t()) :: Keyword.t()
   def form_options(form, opts \\ []) do
     default = [
       class: "effective-form needs-validation",
@@ -49,7 +49,7 @@ defmodule ExEffectiveBootstrap.Options do
     |> merge(opts)
   end
 
-  @spec input_type(Phoenix.HTML.Form.t(), atom, Keyword.t()) :: atom
+  @spec input_type(any, atom, Keyword.t()) :: atom
   def input_type(form, field, opts \\ []) do
     cond do
       opts[:type] ->
@@ -80,7 +80,7 @@ defmodule ExEffectiveBootstrap.Options do
   @spec to_options(Map.t()) :: t()
   def to_options(map), do: struct(__MODULE__, map)
 
-  @spec build(t(), Phoenix.HTML.Form.t(), atom, Keyword.t()) :: t()
+  @spec build(t(), any, atom, Keyword.t()) :: t()
   def build(%__MODULE__{} = options, form, field, opts \\ []) do
     Map.from_struct(options)
     |> update(:type, form, field, opts)

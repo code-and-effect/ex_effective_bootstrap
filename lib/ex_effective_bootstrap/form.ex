@@ -14,27 +14,27 @@ defmodule ExEffectiveBootstrap.Form do
   use Phoenix.HTML
   alias ExEffectiveBootstrap.Options
 
-  @spec effective_form_for(Phoenix.HTML.FormData.t(), String.t()) :: Phoenix.HTML.Form.t()
+  @spec effective_form_for(any, String.t()) :: any
   def effective_form_for(form_data, action) do
     form_for(form_data, action, [])
   end
 
-  @spec effective_form_for(Phoenix.HTML.FormData.t(), String.t(), Keyword.t()) ::
-          Phoenix.HTML.Form.t()
+  @spec effective_form_for(any, String.t(), Keyword.t()) ::
+          any
   def effective_form_for(form_data, action, options) when is_list(options) do
     form_for(form_data, action, Options.form_options(form_data, options))
   end
 
   @spec effective_form_for(
-          Phoenix.HTML.FormData.t(),
+          any,
           String.t(),
-          (Phoenix.HTML.Form.t() -> Phoenix.HTML.unsafe())
+          (any -> Phoenix.HTML.unsafe())
         ) :: Phoenix.HTML.safe()
   @spec effective_form_for(
-          Phoenix.HTML.FormData.t(),
+          any,
           String.t(),
           Keyword.t(),
-          (Phoenix.HTML.Form.t() -> Phoenix.HTML.unsafe())
+          (any -> Phoenix.HTML.unsafe())
         ) :: Phoenix.HTML.safe()
   def effective_form_for(form_data, action, options \\ [], fun) when is_function(fun, 1) do
     %{action: action, options: options} = form = effective_form_for(form_data, action, options)
