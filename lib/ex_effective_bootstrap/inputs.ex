@@ -4,12 +4,12 @@ defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
   alias ExEffectiveBootstrap.{Icons, Tags, Options}
 
-  @spec input(any, atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
+  @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
   def input(form, field, opts \\ []) do
     effective_input(form, Options.input_type(form, field, opts), field, opts)
   end
 
-  @spec effective_input(any, atom, atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
+  @spec effective_input(Phoenix.HTML.Form.t(), atom, atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
   def effective_input(form, :email_input, field, opts) do
     %Options{prepend: [text: Icons.icon("at-sign"), class: "input-group-text"]}
     |> to_html(form, field, opts)
