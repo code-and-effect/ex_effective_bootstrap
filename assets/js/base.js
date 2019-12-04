@@ -1,4 +1,3 @@
-import $ from "jquery"
 import TelephoneInput from "./telephone_input/base"
 import Select from "./select/base"
 

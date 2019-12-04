@@ -47,9 +47,19 @@ Add to your `assets/package.json`:
 Add to your `app.js`:
 
 ```
+import css from "../css/app.scss"
+
+import $ from "jquery"
+
+window.jQuery = $;
+window.$ = $;
+
 import "bootstrap"
 import "phoenix_html"
-import "ex_effective_bootstrap"
+
+import { EffectiveBootstrap, EffectiveForm } from "ex_effective_bootstrap"
+window.EffectiveBootstrap = new EffectiveBootstrap();
+window.EffectiveForm = new EffectiveForm();
 ```
 
 Then in the `app/assets/` folder, `npm install`. Good luck.
