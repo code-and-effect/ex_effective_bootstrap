@@ -14,13 +14,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: path.resolve(__dirname, './js/ex_effective_bootstrap.js'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'ExEffectiveBootstrap'
-        }]
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
