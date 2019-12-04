@@ -10,7 +10,8 @@ import css from "../css/ex_effective_bootstrap.scss"
 import EffectiveBootstrap from "./base"
 import EffectiveForm from "./form"
 
-export { EffectiveBootstrap, EffectiveForm }
+window.EffectiveBootstrap || (window.EffectiveBootstrap = new EffectiveBootstrap());
+window.EffectiveForm || (window.EffectiveForm = new EffectiveForm());
 
 $(document).ready(function () {
   window.EffectiveBootstrap.initialize();

@@ -55,11 +55,7 @@ window.jQuery = $;
 window.$ = $;
 
 import "bootstrap"
-import "phoenix_html"
-
-import { EffectiveBootstrap, EffectiveForm } from "ex_effective_bootstrap"
-window.EffectiveBootstrap = new EffectiveBootstrap();
-window.EffectiveForm = new EffectiveForm();
+import "ex_effective_bootstrap"
 ```
 
 Then in the `app/assets/` folder, `npm install`. Good luck.
