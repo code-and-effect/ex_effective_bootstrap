@@ -13,9 +13,9 @@ import EffectiveFormLiveSocketHooks from "./form/live_socket_hooks"
 export { EffectiveForm, EffectiveFormLiveSocketHooks }
 
 // Initialize EffectiveForm on the window
-
 window.EffectiveForm || (window.EffectiveForm = new EffectiveForm);
 
+// And set up any form inputs on ready
 $(document).ready(function () {
   window.EffectiveForm.initialize();
 });

@@ -3143,4 +3143,4 @@
       Plugin.call($selectpicker, $selectpicker.data());
     })
   });
-})(jQuery);
+})($);
