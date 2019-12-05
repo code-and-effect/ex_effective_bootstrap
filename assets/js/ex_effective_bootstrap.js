@@ -7,12 +7,14 @@
 
 import css from "../css/ex_effective_bootstrap.scss"
 
-import EffectiveForm from "./form"
-import EffectiveFormLiveSocketHooks from "./live_socket"
+import EffectiveForm from "./form/base"
+import EffectiveFormLiveSocketHooks from "./form/live_socket_hooks"
 
 export { EffectiveForm, EffectiveFormLiveSocketHooks }
 
-window.EffectiveForm || (window.EffectiveForm = new EffectiveForm());
+// Initialize EffectiveForm on the window
+
+window.EffectiveForm || (window.EffectiveForm = new EffectiveForm);
 
 $(document).ready(function () {
   window.EffectiveForm.initialize();

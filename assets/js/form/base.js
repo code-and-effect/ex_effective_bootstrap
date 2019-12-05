@@ -1,5 +1,5 @@
-import TelephoneInput from "./telephone_input/base"
-import Select from "./select/base"
+import TelephoneInput from "../telephone_input/base"
+import Select from "../select/base"
 
 const effective_inputs = {
   'telephone_input': TelephoneInput,
@@ -54,7 +54,7 @@ export default class EffectiveForm {
 
     this.disable($form);
 
-    if($form.attr('phx-submit')) {
+    if ($form.attr('phx-submit')) {
       this.flashLiveViewSuccess();
     } else {
       this.flashSuccess();
@@ -65,8 +65,8 @@ export default class EffectiveForm {
 
   // These controls need a little bit of help with client side validations
   validateSelect($select) {
-    $select.each(function() {
-      if($(this).is('select:invalid')) {
+    $select.each(function () {
+      if ($(this).is('select:invalid')) {
         $(this).closest('.bootstrap-select').addClass('is-invalid').removeClass('is-valid');
       } else {
         $(this).closest('.bootstrap-select').addClass('is-valid').removeClass('is-invalid');
@@ -135,7 +135,7 @@ export default class EffectiveForm {
       .delay(delay)
       .fadeOut('slow', function () {
         $('.effective-current-submit').removeClass('effective-current-submit');
-        if(fun) { fun(); }
+        if (fun) { fun(); }
       });
   }
 }

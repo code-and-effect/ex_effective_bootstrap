@@ -56,6 +56,19 @@ window.$ = $;
 
 import "bootstrap"
 import "ex_effective_bootstrap"
+
+// Use the following for an effective_form_form form
+// inside a Phoenix LiveView live_render()
+import { EffectiveFormLiveSocketHooks } from "ex_effective_bootstrap"
+let Hooks = {}
+Hooks.EffectiveForm = new EffectiveFormLiveSocketHooks
+
+import { Socket } from "phoenix"
+import LiveSocket from "phoenix_live_view"
+
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks});
+liveSocket.connect();
+
 ```
 
 Then in the `app/assets/` folder, `npm install`. Good luck.
@@ -145,6 +158,21 @@ Using `append` and `prepend` can be fun to make input groups:
 ```
 <%= input f, :song, prepend: icon(:music) %>
 <%= input f, :song, prepend: [text: [icon(:music), "Song:"], class: "my-song-input-group"] %>
+```
+
+## Phoenix LiveView
+
+The form library can work with LiveView.
+
+Make sure your javascript is including the `EffectiveFormLiveSocketHooks`, as above.
+
+And otherwise, just write a regular liveview form:
+
+```
+<%= effective_form_for @changeset, "#", [phx_submit: :save], fn f -> %>
+  <%= input f, :foo %>
+  <%= effective_submit() %>
+<% end %>
 ```
 
 ## Icons
