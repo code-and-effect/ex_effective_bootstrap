@@ -41,8 +41,27 @@ Add to your `assets/package.json`:
   "phoenix": "file:../deps/phoenix",
   "phoenix_html": "file:../deps/phoenix_html",
   "ex_effective_bootstrap": "file../deps/ex_effective_bootstrap"
+},
+"devDependencies": {
+  "expose-loader": "^0.7.5",
 }
 ```
+
+Add a rule to use the expose-loader in your `webpack.config.js`:
+
+```
+  module: {
+    rules: [
+      {
+        test: require.resolve('jquery'),
+        use: [
+          { loader: 'expose-loader', options: '$' },
+          { loader: 'expose-loader', options: 'jQuery' }
+        ]
+      },
+```
+
+See below for a full working app webpack.config.js example.
 
 Add to your `app.js`:
 
@@ -57,7 +76,7 @@ window.$ = $;
 import "bootstrap"
 import "ex_effective_bootstrap"
 
-// Use the following for an effective_form_form form
+// Use the following for an effective_form_for() form
 // inside a Phoenix LiveView live_render()
 import { EffectiveFormLiveSocketHooks } from "ex_effective_bootstrap"
 let Hooks = {}
@@ -79,7 +98,7 @@ Sanity check the javascript is working in the browser console:
 console.log($.fn.jquery)
 "3.4.1"
 
-console.log(EffectiveBootstrap.good())
+console.log(EffectiveForm.good())
 "you good"
 ```
 
@@ -215,6 +234,137 @@ TODO
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/ex_effective_bootstrap](https://hexdocs.pm/ex_effective_bootstrap).
+
+## Example app files
+
+Here's my app's `assets/js/app.js`:
+
+```
+import css from "../css/app.scss"
+
+import $ from "jquery"
+
+window.jQuery = $;
+window.$ = $;
+
+import "bootstrap"
+import "phoenix_html"
+import "ex_effective_bootstrap"
+
+import { EffectiveFormLiveSocketHooks } from "ex_effective_bootstrap"
+let Hooks = {}
+Hooks.EffectiveForm = new EffectiveFormLiveSocketHooks
+
+import a from "./bootstrap_form.js"
+
+import { Socket } from "phoenix"
+import LiveSocket from "phoenix_live_view"
+
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks});
+liveSocket.connect();
+```
+
+Here's my `assets/css/app.scss`:
+
+```
+// App specific
+@import "bootstrap_overrides";
+@import "forms";
+
+// For bootstrap and ex_effective_bootstrap sass deps
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../../deps/ex_effective_bootstrap/priv/static/ex_effective_bootstrap";
+```
+
+Here's my `webpack.config.js`:
+
+```
+const path = require('path');
+const glob = require('glob');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+module.exports = (env, options) => ({
+  optimization: {
+    minimizer: [
+      new OptimizeCSSAssetsPlugin({})
+    ]
+  },
+  entry: {
+    './js/app.js': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
+  },
+  output: {
+    filename: 'app.js',
+    path: path.resolve(__dirname, '../priv/static/js')
+  },
+  module: {
+    rules: [
+      {
+        test: require.resolve('jquery'),
+        use: [
+          { loader: 'expose-loader', options: '$' },
+          { loader: 'expose-loader', options: 'jQuery' }
+        ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.s?css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({ filename: '../css/app.css' }),
+    new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
+  ]
+});
+```
+
+And my `assets/package.json`:
+
+```
+{
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "deploy": "webpack --mode production",
+    "watch": "webpack --mode development --watch"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0",
+    "phoenix": "file:../deps/phoenix",
+    "phoenix_html": "file:../deps/phoenix_html",
+    "phoenix_live_view": "file:../deps/phoenix_live_view",
+    "ex_effective_bootstrap": "file:../deps/ex_effective_bootstrap"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babel-loader": "^8.0.0",
+    "copy-webpack-plugin": "^4.5.0",
+    "css-loader": "^3.2.0",
+    "cypress": "^3.7.0",
+    "expose-loader": "^0.7.5",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "sass-loader": "^7.3.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
+```
 
 
 ## License
