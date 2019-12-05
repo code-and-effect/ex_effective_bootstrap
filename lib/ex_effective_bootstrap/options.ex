@@ -251,8 +251,8 @@ defmodule ExEffectiveBootstrap.Options do
       json =
         [method_name: options.type]
         |> merge(options.javascript)
-        |> Enum.into(%{}, fn { k, v } -> {k, v} end)
-        |> Jason.encode!
+        |> Enum.into(%{}, fn {k, v} -> {k, v} end)
+        |> Jason.encode!()
 
       ["data-input-js-options": json]
     end

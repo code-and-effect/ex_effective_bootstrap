@@ -13,5 +13,4 @@ defmodule ExEffectiveBootstrap.Validate do
       _ -> changeset
     end
   end
-
 end
