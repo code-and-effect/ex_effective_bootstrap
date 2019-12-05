@@ -1,6 +1,36 @@
+import TelephoneInput from "./telephone_input/base"
+import Select from "./select/base"
+
+const effective_inputs = {
+  'telephone_input': TelephoneInput,
+  'select': Select
+}
+
 export default class EffectiveForm {
   constructor() {
     this.currentSubmit = "";
+  }
+
+  good() { return "you good"; }
+
+  initialize(target) {
+    $(target || document).find('[data-input-js-options]:not(.initialized)').each(function (i, element) {
+      let $element = $(element);
+      let options = JSON.parse($element.attr('data-input-js-options'));
+
+      let method_name = options['method_name'];
+      delete options['method_name'];
+
+      if (!effective_inputs[method_name]) {
+        return console.error("EffectiveForm " + method_name + " has not been implemented");
+      }
+
+      let effective_input = new effective_inputs[method_name];
+      effective_input.initialize($element, options);
+      $element.addClass('initialized');
+    });
+
+    return true;
   }
 
   onSubmitClick(input) {

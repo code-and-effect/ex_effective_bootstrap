@@ -7,20 +7,21 @@
 
 import css from "../css/ex_effective_bootstrap.scss"
 
-import EffectiveBootstrap from "./base"
 import EffectiveForm from "./form"
+import EffectiveFormLiveSocketHooks from "./live_socket"
 
-window.EffectiveBootstrap || (window.EffectiveBootstrap = new EffectiveBootstrap());
+export { EffectiveForm, EffectiveFormLiveSocketHooks }
+
 window.EffectiveForm || (window.EffectiveForm = new EffectiveForm());
 
 $(document).ready(function () {
-  window.EffectiveBootstrap.initialize();
+  window.EffectiveForm.initialize();
 });
 
 $(document).on('turbolinks:load', function () {
-  window.EffectiveBootstrap.initialize();
+  window.EffectiveForm.initialize();
 });
 
-$(document).on('effective-bootstrap:initialize', function (event) {
-  window.EffectiveBootstrap.initialize(event.currentTarget);
+$(document).on('effective-form:initialize', function (event) {
+  window.EffectiveForm.initialize(event.currentTarget);
 });
