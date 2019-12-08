@@ -11,7 +11,7 @@ export default class EffectiveForm {
     this.currentSubmit = "";
   }
 
-  good() { return "you good 0.1.10"; }
+  good() { return "you good 0.1.11"; }
 
   initialize(target) {
     $(target || document).find('[data-input-js-options]:not(.initialized)').each(function (i, element) {
