@@ -63,7 +63,7 @@ module: {
 }
 ```
 
-See below for a full working app webpack.config.js example.
+(see below for a full working app `webpack.config.js` example)
 
 Add to your `app.js`:
 
@@ -111,14 +111,6 @@ Add to your `app.scss`:
 ```
 
 You should now have access to a wide range of beautiful, effective forms inputs and time saving view helpers!
-
-## Flash
-
-Creates a bootstrap alert for each flash message in the conn.
-
-```
-<%= flash_alert(@conn) %>
-```
 
 ## Forms
 
@@ -203,8 +195,8 @@ end
 
 def changeset(post, params \\ %{}) do
   post
-  |> cast(params, [:name])
-  |> validate_required([:name])
+  |> cast(params, [:title])
+  |> validate_required([:title])
   |> cast_assoc(:comments, with: &Comment.changeset/2)
 end
 ```
@@ -332,6 +324,14 @@ The alerts are dismissable.
 <%= collapse("Click to expand") do %>
   <p>This is the expanded content</p>
 <% end %>
+```
+
+### Flash
+
+Creates a bootstrap alert for each flash message in the phoenix conn.
+
+```
+<%= flash_alert(@conn) %>
 ```
 
 ### Nav Link
