@@ -19,14 +19,9 @@ export { EffectiveForm, EffectiveFormLiveSocketHooks }
 window.EffectiveForm || (window.EffectiveForm = new EffectiveForm);
 
 // And set up any form inputs on ready
-$(document).ready(function () {
-  window.EffectiveForm.initialize();
-});
+$(document).ready(window.EffectiveForm.initialize);
+$(document).on('turbolinks:load', window.EffectiveForm.initialize);
 
-$(document).on('turbolinks:load', function () {
-  window.EffectiveForm.initialize();
-});
-
-$(document).on('effective-form:initialize', function (event) {
+$(document).on('effective-form:initialize', function(event) {
   window.EffectiveForm.initialize(event.currentTarget);
 });

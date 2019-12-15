@@ -2,9 +2,11 @@ defmodule ExEffectiveBootstrap.InputsFor do
   @moduledoc "Bootstrap has_many form builder"
   use Phoenix.HTML
   alias Phoenix.HTML.Form
+  alias ExEffectiveBootstrap.Icons
 
   @doc """
-  Creates inputs_for a has_many association. Includes Add Another and Delete buttons.
+  A nested fields has_many builder. Includes Add Another and Delete buttons.
+  Works with a regular phoenix form_for and effective_form_for
 
   ## Example
   <%= effective_form_for @changeset, @action, fn f -> %>
@@ -21,6 +23,12 @@ defmodule ExEffectiveBootstrap.InputsFor do
     <%= input @form, :body %>
   </div>
   """
+  @spec effective_inputs_for(
+          Phoenix.HTML.FormData.t(),
+          atom,
+          Keyword.t(),
+          (Phoenix.HTML.Form.t() -> Phoenix.HTML.unsafe())
+        ) :: Phoenix.HTML.safe()
   def effective_inputs_for(form, field, opts \\ [], fun) do
     associated = Ecto.build_assoc(form.data, field)
     valid_form = Map.put(form, :params, %{})
@@ -29,13 +37,14 @@ defmodule ExEffectiveBootstrap.InputsFor do
     content_tag(:div, class: "effective-inputs-for") do
       [
         Form.inputs_for(form, field, opts, fun),
-        content_tag(:div, effective_inputs_add_link(opts), class: "effective-inputs-for-links"),
+        content_tag(:div, effective_inputs_for_add_link(opts), class: "effective-inputs-for-links"),
         content_tag(:div, template, class: "effective-inputs-for-template", style: "display: none;")
       ]
     end
   end
 
-  def effective_inputs_add_link(opts \\ []) do
+  @spec effective_inputs_for_add_link(Keyword.t()) :: Phoenix.HTML.safe()
+  def effective_inputs_for_add_link(opts \\ []) do
     opts =
       [
         title: "Add Another",
@@ -45,10 +54,11 @@ defmodule ExEffectiveBootstrap.InputsFor do
       ]
       |> Keyword.merge(opts)
 
-    content_tag(:a, opts[:title], opts)
+    content_tag(:a, [Icons.icon("plus-circle"), " ", opts[:title]], opts)
   end
 
-  def effective_inputs_remove_link(form, field, opts \\ []) do
+  @spec effective_inputs_for_remove_link(Phoenix.HTML.FormData.t(), atom, Keyword.t()) :: Phoenix.HTML.safe()
+  def effective_inputs_for_remove_link(form, field, opts \\ []) do
     opts =
       [
         title: "Delete",
@@ -59,7 +69,7 @@ defmodule ExEffectiveBootstrap.InputsFor do
       |> Keyword.merge(opts)
 
     input = Form.hidden_input(form, field)
-    link = content_tag(:a, opts[:title], opts)
+    link = content_tag(:a, Icons.icon("trash-2"), opts)
 
     if form.data.id, do: [input, link], else: link
   end

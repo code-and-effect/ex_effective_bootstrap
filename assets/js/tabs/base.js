@@ -1,4 +1,5 @@
 let initTabs = function() {
+  console.log("tabs");
   let $tab_with_error = $(".form-group.has-error").first().closest(".tab-pane");
 
   if ($tab_with_error.length > 0) {
@@ -13,4 +14,4 @@ let initTabs = function() {
   }
 }
 
-$(document).ready(function() { initTabs(); });
+$(document).ready(initTabs);

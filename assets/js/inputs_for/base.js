@@ -3,7 +3,7 @@ const effectiveRegExp = function(string) {
 }
 
 let initInputsFor = function() {
-  $(document).find("div.effective-inputs-for:not(.initialized)").each(function (i, element) {
+  $(document).find("div.effective-inputs-for:not(.initialized)").each(function(i, element) {
     let $element = $(element)
     let $template = $(element).children('.effective-inputs-for-template').first()
 
@@ -31,7 +31,7 @@ let initInputsFor = function() {
 }
 
 // BootstrapInputsFor Events
-$(document).on('click', '[data-effective-inputs-for-add]', function (event) {
+$(document).on('click', '[data-effective-inputs-for-add]', function(event) {
   event.preventDefault()
 
   let $element = $(event.currentTarget).closest('.effective-inputs-for')
@@ -49,7 +49,7 @@ $(document).on('click', '[data-effective-inputs-for-add]', function (event) {
   return false
 })
 
-$(document).on('click', '[data-effective-inputs-for-delete]', function (event) {
+$(document).on('click', '[data-effective-inputs-for-delete]', function(event) {
   event.preventDefault()
 
   let $target = $(event.currentTarget)
@@ -66,5 +66,5 @@ $(document).on('click', '[data-effective-inputs-for-delete]', function (event) {
   return false
 })
 
-$(document).ready(function() { initInputsFor(); });
+$(document).ready(initInputsFor);
 
