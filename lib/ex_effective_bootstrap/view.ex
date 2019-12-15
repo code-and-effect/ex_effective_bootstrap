@@ -1,6 +1,6 @@
 defmodule ExEffectiveBootstrap.View do
   @moduledoc "Main entry point to include all ex_effective_bootstrap modules"
-  alias ExEffectiveBootstrap.{Collapse, Form, Icons, Inputs, Submit, Tabs}
+  alias ExEffectiveBootstrap.{Collapse, FlashAlert, Form, Icons, Inputs, Navs, Submit, Tabs}
 
   defmacro __using__([]) do
     quote do
@@ -12,6 +12,8 @@ defmodule ExEffectiveBootstrap.View do
 
       # View Helpers
       import Collapse
+      import FlashAlert
+      import Navs
       import Tabs
     end
   end

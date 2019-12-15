@@ -3,7 +3,7 @@ defmodule ExEffectiveBootstrap.Collapse do
   use Phoenix.HTML
 
   @doc """
-  Bootstrap collapse. Expand/collapse additional content
+  Bootstrap collapse. Expand/collapse additional content.
 
   Examples:
 
