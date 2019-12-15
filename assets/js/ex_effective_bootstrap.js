@@ -10,6 +10,9 @@ import css from "../css/ex_effective_bootstrap.scss"
 import EffectiveForm from "./form/base"
 import EffectiveFormLiveSocketHooks from "./form/live_socket_hooks"
 
+import "./tabs/base"
+import "./inputs_for/base"
+
 export { EffectiveForm, EffectiveFormLiveSocketHooks }
 
 // Initialize EffectiveForm on the window
