@@ -50,15 +50,17 @@ Add to your `assets/package.json`:
 Add a rule to use the expose-loader in your `webpack.config.js`:
 
 ```
-  module: {
-    rules: [
-      {
-        test: require.resolve('jquery'),
-        use: [
-          { loader: 'expose-loader', options: '$' },
-          { loader: 'expose-loader', options: 'jQuery' }
-        ]
-      },
+module: {
+  rules: [
+    {
+      test: require.resolve('jquery'),
+      use: [
+        { loader: 'expose-loader', options: '$' },
+        { loader: 'expose-loader', options: 'jQuery' }
+      ]
+    }
+  ]
+}
 ```
 
 See below for a full working app webpack.config.js example.
@@ -87,7 +89,6 @@ import LiveSocket from "phoenix_live_view"
 
 let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks});
 liveSocket.connect();
-
 ```
 
 Then in the `app/assets/` folder, `npm install`. Good luck.
@@ -110,6 +111,14 @@ Add to your `app.scss`:
 ```
 
 You should now have access to a wide range of beautiful, effective forms inputs and time saving view helpers!
+
+## Flash
+
+Creates a bootstrap alert for each flash message in the conn.
+
+```
+<%= flash_alert(@conn) %>
+```
 
 ## Forms
 
@@ -179,6 +188,85 @@ Using `append` and `prepend` can be fun to make input groups:
 <%= input f, :song, prepend: [text: [icon(:music), "Song:"], class: "my-song-input-group"] %>
 ```
 
+## Form inputs for
+
+Easily build nested has_many associations from the parent form.
+
+This was inspired by the ruby gem [cocoon](https://github.com/nathanvda/cocoon).
+
+In your parent:
+
+```
+schema "posts" do
+  has_many :comments, Comment
+end
+
+def changeset(post, params \\ %{}) do
+  post
+  |> cast(params, [:name])
+  |> validate_required([:name])
+  |> cast_assoc(:comments, with: &Comment.changeset/2)
+end
+```
+
+In your child:
+
+```
+schema "comments" do
+  belongs_to :post, Post
+end
+
+def changeset(comment, params \\ %{}) do
+  comment
+  |> cast(params, [:post_id, ..., :delete])
+  |> mark_for_deletion()
+end
+
+# If delete was set and it is true, let's change the action
+defp mark_for_deletion(changeset) do
+  if get_change(changeset, :delete) do
+    %{changeset | action: :delete}
+  else
+    changeset
+  end
+end
+```
+
+Then create a form for the post (this will work with a form_for or effective_form_for):
+
+```
+<%= effective_form_for @changeset, @action, fn f -> %>
+  <%= input f, :title %>
+  <%= input f, :body%>
+
+  <%= effective_inputs_for f, :comments, fn comment -> %>
+    <%= render("_comment_fields.html", form: comment) %>
+  <% end %>
+
+  <%= effective_submit() %>
+<% end %>
+```
+
+And create a `_comment_fields.html.eex` in the same folder as the post form template:
+
+```
+<div class="nested-fields">
+  <%= if @form.data.id do %>
+    <%= hidden_input @form, :id %>
+  <% end %>
+
+  <%= hidden_input @form, :post_id %>
+
+  <%= input @form, :title %>
+  <%= input @form, :body %>
+
+  <%= effective_inputs_for_remove_link(@form, :delete) %>
+</div>
+```
+
+The template must start with `<div class="nested-fields">`.
+
+
 ## Phoenix LiveView
 
 The form library can work with LiveView.
@@ -225,7 +313,76 @@ end
 
 ## View Helpers
 
-Coming soon.
+### Alerts
+
+[Bootstrap Alerts](https://getbootstrap.com/docs/4.0/components/alerts/)
+
+The alerts are dismissable.
+
+```
+<%= alert(:danger, "This is bad") %>
+<%= alert(:success, "You did it!") %>
+```
+
+### Collapse
+
+[Bootstrap Collapse](https://getbootstrap.com/docs/4.0/components/collapse/)
+
+```
+<%= collapse("Click to expand") do %>
+  <p>This is the expanded content</p>
+<% end %>
+```
+
+### Nav Link
+
+[Bootstrap Navs](https://getbootstrap.com/docs/4.0/components/navs/)
+
+Bootstrap nav_link for use on a navbar.
+Automatically puts in the "active" class when on conn.request_path
+
+```
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">My Brand!</a>
+
+  <button class="navbar-toggler" data-aria-controls="navContent" data-aria-label="Toggle navigation" data-target="#navContent" data-toggle="collapse" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navContent">
+    <ul class="navbar-nav mr-auto">
+      <%= nav_link(@conn, "Root", to: "/) %>
+      <%= nav_link(@conn, "Posts", to: Routes.post_path(@conn, :index)) %>
+    </ul>
+  </div>
+</nav>
+```
+
+### Tabs
+
+[Bootstrap Tabs](https://getbootstrap.com/docs/4.0/components/navs/#tabs)
+
+```
+<%= tabs do %>
+  <%= tab("One") do %>
+    <p>This is tab one</p>
+  <% end %>
+
+  <%= tab("Two") do %>
+    <p>This is tab two</p>
+  <% end %>
+<% end %>
+```
+
+You can specify the `active: "Two"` tab to activate. As well as pass content for a badge on the tab.
+
+```
+<%= tabs(active: "Two", class: "asdf") do %>
+  <%= tab "One" %>
+  <%= tab "Two", 30 %>
+  <%= tab "Three", content_tag(:span, 24, class: "badge badge-info") %>
+<% end %>
+```
 
 ## Hexcellent Documentation
 
@@ -254,8 +411,6 @@ import "ex_effective_bootstrap"
 import { EffectiveFormLiveSocketHooks } from "ex_effective_bootstrap"
 let Hooks = {}
 Hooks.EffectiveForm = new EffectiveFormLiveSocketHooks
-
-import a from "./bootstrap_form.js"
 
 import { Socket } from "phoenix"
 import LiveSocket from "phoenix_live_view"
