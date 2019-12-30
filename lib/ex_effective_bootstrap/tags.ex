@@ -51,6 +51,11 @@ defmodule ExEffectiveBootstrap.Tags do
     apply(Form, options.type, [form, field, options.select_options, options.input])
   end
 
+  defp input(form, field, %Options{type: :static_field} = options) do
+    content = options.input[:value] || Map.get(form.data, field)
+    content_tag(:p, content, Keyword.delete(options.input, :value))
+  end
+
   defp input(form, field, options) do
     apply(Form, options.type, [form, field, options.input])
   end

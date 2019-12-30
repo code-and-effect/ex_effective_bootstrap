@@ -151,6 +151,7 @@ defmodule ExEffectiveBootstrap.Options do
     validations = Form.input_validations(form, field)
     with_errors = input_with_errors(form, field)
     with_hint = input_with_hint(options, form, field)
+    with_id = input_with_id(options, form, field)
     with_js = input_with_javascript(options)
 
     merged_opts =
@@ -158,6 +159,7 @@ defmodule ExEffectiveBootstrap.Options do
       |> merge(validations)
       |> merge(with_errors)
       |> merge(with_hint)
+      |> merge(with_id)
       |> merge(with_js)
       |> merge(opts)
 
@@ -262,6 +264,13 @@ defmodule ExEffectiveBootstrap.Options do
         |> Jason.encode!()
 
       ["data-input-js-options": json]
+    end
+  end
+
+  # We only need this for static_field, otherwise it's added automatically
+  defp input_with_id(options, form, field) do
+    if options.type == :static_field do
+      [id: Form.input_id(form, field)]
     end
   end
 

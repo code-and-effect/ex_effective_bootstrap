@@ -37,6 +37,10 @@ defmodule ExEffectiveBootstrap.Inputs do
     %Options{javascript: [method_name: :select]} |> to_html(form, field, opts)
   end
 
+  def effective_input(form, :static_field, field, opts) do
+    %Options{input: [class: "form-control-plaintext"]} |> to_html(form, field, opts)
+  end
+
   def effective_input(form, :telephone_input, field, opts) do
     %Options{
       input: [class: "form-control", placeholder: "(555) 555-5555"],
@@ -70,6 +74,12 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   defp to_html({%Tags{} = tags, %Options{type: :hidden_input} = options}) do
     tags.input
+  end
+
+  defp to_html({%Tags{} = tags, %Options{type: :static_field} = options}) do
+    content_tag :div, options.wrapper do
+      [tags.label, tags.input, tags.hint]
+    end
   end
 
   # defp to_html({%Tags{} = tags, %Options{type: :new_input} = options}) do
