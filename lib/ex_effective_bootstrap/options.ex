@@ -64,6 +64,9 @@ defmodule ExEffectiveBootstrap.Options do
       opts[:multiple_select] ->
         :multiple_select
 
+      opts[:static] ->
+        :static_field
+
       String.contains?("#{field}", "phone") ->
         :telephone_input
 
