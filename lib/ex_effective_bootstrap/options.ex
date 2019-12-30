@@ -104,12 +104,19 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update(options, :select_options, _form, _field, opts) do
-    if options[:type] == :select || options[:type] == :multiple_select do
-      Map.put(options, :select_options, opts[:select] || opts[:multiple_select])
+    if Enum.member?([:select, :multiple_select], options[:type]) do
+      select_options = get_select_options(opts[:select] || opts[:multiple_select])
+      Map.put(options, :select_options, select_options)
     else
       Map.put(options, :select_options, false)
     end
   end
+
+  defp get_select_options([%_{id: _id} | _] = collection) do
+    Enum.into(collection, %{}, fn struct -> {to_string(struct), struct.id} end)
+  end
+
+  defp get_select_options(collection), do: collection
 
   defp update(options, :required, form, field, opts) do
     required =
