@@ -51,6 +51,23 @@ defmodule ExEffectiveBootstrap.Tags do
     apply(Form, options.type, [form, field, options.select_options, options.input])
   end
 
+  defp input(form, field, %Options{type: :radios} = options) do
+    hidden = Form.hidden_input(form, field, id: nil, value: "")
+
+    radios = Enum.map(options.select_options, fn {key, value} ->
+      unique_id = "#{Form.input_id(form, field)}_#{:erlang.unique_integer()}"
+      custom_input = Options.merge(options.input, [class: "custom-control-input", id: unique_id])
+      custom_label = [class: "custom-control-label", for: unique_id]
+
+      input = Form.radio_button(form, field, value, custom_input)
+      label = content_tag(:label, key, custom_label)
+
+      content_tag(:div, [input, label], options.custom_control)
+    end)
+
+    [hidden] ++ radios
+  end
+
   defp input(form, field, %Options{type: :static_field} = options) do
     content = options.input[:value] || Map.get(form.data, field)
     content_tag(:p, content, Keyword.delete(options.input, :value))

@@ -48,6 +48,10 @@ defmodule ExEffectiveBootstrap.Inputs do
     %Options{javascript: [method_name: :select]} |> to_html(form, field, opts)
   end
 
+  def effective_input(form, :radios, field, opts) do
+    %Options{wrapper: [class: "form-group effective-radios"]} |> to_html(form, field, opts)
+  end
+
   def effective_input(form, :static_field, field, opts) do
     %Options{input: [class: "form-control-plaintext"]} |> to_html(form, field, opts)
   end

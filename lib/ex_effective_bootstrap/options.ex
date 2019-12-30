@@ -15,7 +15,8 @@ defmodule ExEffectiveBootstrap.Options do
             invalid: [class: "invalid-feedback"],
             prepend: [class: "input-group-text"],
             append: [class: "input-group-text"],
-            input_group: [class: "input-group"]
+            input_group: [class: "input-group"],
+            custom_control: []
 
   @type t :: %__MODULE__{
           type: atom | nil,
@@ -30,7 +31,8 @@ defmodule ExEffectiveBootstrap.Options do
           invalid: Keyword.t() | false,
           prepend: Keyword.t() | false,
           append: Keyword.t() | false,
-          input_group: Keyword.t() | false
+          input_group: Keyword.t() | false,
+          custom_control: Keyword.t() | false
         }
 
   @spec form_options(Phoenix.HTML.Form.t() | atom, Keyword.t()) :: Keyword.t()
@@ -64,6 +66,12 @@ defmodule ExEffectiveBootstrap.Options do
       opts[:multiple_select] ->
         :multiple_select
 
+      opts[:radios] ->
+        :radios
+
+      opts[:checks] ->
+        :checks
+
       opts[:static] ->
         :static_field
 
@@ -89,6 +97,7 @@ defmodule ExEffectiveBootstrap.Options do
     |> update(:type, form, field, opts)
     |> update(:required, form, field, opts)
     |> update(:select_options, form, field, opts)
+    |> update(:custom_control, form, field, opts)
     |> update(:wrapper, form, field, opts)
     |> update(:label, form, field, opts)
     |> update(:javascript, form, field, opts)
@@ -107,19 +116,21 @@ defmodule ExEffectiveBootstrap.Options do
   end
 
   defp update(options, :select_options, _form, _field, opts) do
-    if Enum.member?([:select, :multiple_select], options[:type]) do
-      select_options = get_select_options(opts[:select] || opts[:multiple_select])
-      Map.put(options, :select_options, select_options)
+    if Enum.member?([:select, :multiple_select, :radios, :checks], options[:type]) do
+      collection = (opts[:select] || opts[:multiple_select] || opts[:radios] || opts[:checks])
+      Map.put(options, :select_options, get_select_options(collection))
     else
       Map.put(options, :select_options, false)
     end
   end
 
-  defp get_select_options([%_{id: _id} | _] = collection) do
-    Enum.into(collection, %{}, fn struct -> {to_string(struct), struct.id} end)
+  defp update(options, :custom_control, _form, _field, opts) do
+    if Enum.member?([:radios, :checks], options[:type]) do
+      Map.put(options, :custom_control, get_custom_control_options(options, opts))
+    else
+      Map.put(options, :custom_control, false)
+    end
   end
-
-  defp get_select_options(collection), do: collection
 
   defp update(options, :required, form, field, opts) do
     required =
@@ -146,7 +157,10 @@ defmodule ExEffectiveBootstrap.Options do
       :prepend,
       :append,
       :select,
-      :multiple_select
+      :multiple_select,
+      :radios,
+      :checks,
+      :inline
     ]
 
     opts = merge(opts[:input], Keyword.drop(opts, drop))
@@ -286,4 +300,32 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, class, nil), do: Keyword.merge(options, class: class)
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
+
+
+  # Advanced Options Parsing
+  defp get_select_options([%_{id: _id} | _] = collection) do
+    Enum.into(collection, %{}, fn struct -> {to_string(struct), struct.id} end)
+  end
+
+  defp get_select_options(collection), do: collection
+
+  defp get_custom_control_options(options, opts) do
+    cond do
+      options[:type] == :radios && opts[:inline] ->
+        [class: "custom-control custom-radio custom-control-inline"]
+
+      options[:type] == :checks && opts[:inline]->
+        [class: "custom-control custom-checkbox custom-control-inline"]
+
+      options[:type] == :radios ->
+        [class: "custom-control custom-radio"]
+
+      options[:type] == :checks ->
+        [class: "custom-control custom-checkbox"]
+
+      true -> []
+    end |> merge(opts[:custom_control])
+  end
+
+
 end

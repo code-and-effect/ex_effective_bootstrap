@@ -74,6 +74,16 @@ export default class EffectiveForm {
     });
   }
 
+  validateCustomControl($custom) {
+    $custom.each(function() {
+      if ($(this).find('input:invalid').length > 0) {
+        $(this).addClass('is-invalid').removeClass('is-valid');
+      } else {
+        $(this).addClass('is-valid').removeClass('is-invalid');
+      }
+    });
+  }
+
   invalidate($form) {
     this.reset($form);
 
@@ -82,6 +92,7 @@ export default class EffectiveForm {
     $form.find('.effective-current-submit').removeClass('.effective-current-submit');
 
     this.validateSelect($form.find('select.initialized'));
+    this.validateCustomControl($form.find('.effective-radios,.effective-checks'));
 
     this.flashError();
     return true;

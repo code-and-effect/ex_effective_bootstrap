@@ -1,0 +1,13 @@
+.effective-radios.is-valid {
+  label { border-color: #28a745; }
+  .valid-feedback { display: block; }
+}
+
+.effective-radios.is-invalid {
+  label { border-color: #dc3545; }
+  .invalid-feedback { display: block; }
+}
+
+.effective-radios > label {
+  display: block;
+}
