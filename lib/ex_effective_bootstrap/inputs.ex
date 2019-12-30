@@ -4,8 +4,19 @@ defmodule ExEffectiveBootstrap.Inputs do
   use Phoenix.HTML
   alias ExEffectiveBootstrap.{Icons, Tags, Options}
 
+  @spec input(Phoenix.HTML.Form.t(), atom) :: Phoenix.HTML.Safe.t()
   @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
-  def input(form, field, opts \\ []) do
+  @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t() | nil, {:do, Phoenix.HTML.Safe.t()}) :: Phoenix.HTML.Safe.t()
+  def input(form, field) do
+    input(form, field, [])
+  end
+
+  def input(form, field, opts) when is_list(opts) do
+    effective_input(form, Options.input_type(form, field, opts), field, opts)
+  end
+
+  def input(form, field, opts \\ [], do: block) do
+    opts = Keyword.merge(opts, [value: block])
     effective_input(form, Options.input_type(form, field, opts), field, opts)
   end
 
@@ -72,7 +83,7 @@ defmodule ExEffectiveBootstrap.Inputs do
     end
   end
 
-  defp to_html({%Tags{} = tags, %Options{type: :hidden_input} = options}) do
+  defp to_html({%Tags{} = tags, %Options{type: :hidden_input}}) do
     tags.input
   end
 
