@@ -11,3 +11,8 @@
 .effective-radios > label {
   display: block;
 }
+
+.effective-radios > .btn-group > label:first-of-type {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}

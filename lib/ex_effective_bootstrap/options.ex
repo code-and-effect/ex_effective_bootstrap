@@ -160,7 +160,8 @@ defmodule ExEffectiveBootstrap.Options do
       :multiple_select,
       :radios,
       :checks,
-      :inline
+      :inline,
+      :buttons
     ]
 
     opts = merge(opts[:input], Keyword.drop(opts, drop))
@@ -311,19 +312,47 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp get_custom_control_options(options, opts) do
     cond do
+      options[:type] == :radios && opts[:buttons] ->
+        [
+          buttons: true,
+          wrapper: [class: "btn-group btn-group-toggle", "data-toggle": "buttons"],
+          label: [class: "btn btn-outline-secondary"],
+          input: []
+        ]
+
       options[:type] == :radios && opts[:inline] ->
-        [class: "custom-control custom-radio custom-control-inline"]
+        [
+          buttons: false,
+          wrapper: [class: "custom-control custom-radio custom-control-inline"],
+          label: [class: "custom-control-label"],
+          input: [class: "custom-control-input"]
+        ]
 
       options[:type] == :checks && opts[:inline]->
-        [class: "custom-control custom-checkbox custom-control-inline"]
+        [
+          buttons: false,
+          wrapper: [class: "custom-control custom-checkbox custom-control-inline"],
+          label: [class: "custom-control-label"],
+          input: [class: "custom-control-input"]
+        ]
 
       options[:type] == :radios ->
-        [class: "custom-control custom-radio"]
+        [
+          buttons: false,
+          wrapper: [class: "custom-control custom-radio"],
+          label: [class: "custom-control-label"],
+          input: [class: "custom-control-input"]
+        ]
 
       options[:type] == :checks ->
-        [class: "custom-control custom-checkbox"]
+        [
+          buttons: false,
+          wrapper: [class: "custom-control custom-checkbox"],
+          label: [class: "custom-control-label"],
+          input: [class: "custom-control-input"]
+        ]
 
-      true -> []
+      true -> raise("unexpected custom control")
     end |> merge(opts[:custom_control])
   end
 
