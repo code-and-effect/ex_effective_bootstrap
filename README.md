@@ -155,13 +155,17 @@ The `as: type` is totally optional, `input` will automatically detect the correc
 <%= input f, :foo, as: :search_input %>
 <%= input f, :foo, as: :telephone_input %>
 <%= input f, :foo, as: :date_input %>
+<%= input f, :foo, as: :hidden_input %>
 <%= input f, :foo, as: :textarea %>
 <%= input f, :foo, as: :file_input %>
 <%= input f, :foo, as: :checkbox %>
 <%= input f, :foo, select: options %>
 <%= input f, :foo, multiple_select: options %>
+<%= input f, :foo, radios: options %>
+<%= input f, :foo, radios: options, buttons: true %>
+<%= input f, :foo, radios: options, inline: true %>
+
 <%= input f, :foo, checks: options %> # TODO
-<%= input f, :foo, radios: options %> # TODO
 <%= input f, :foo, as: :time_input %> # TODO
 <%= input f, :foo, as: :radio_button %> # TODO
 ```
