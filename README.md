@@ -362,6 +362,22 @@ Automatically puts in the "active" class when on conn.request_path
 </nav>
 ```
 
+### Show If / Hide If
+
+Works with javascript to show/hide the content when the input or select field value is changed
+
+```
+<%= input f, :status, select: ["active", "disabled"]
+
+<%= show_if(f, :status, "active") do %>
+  <p>This is displayed when the status select field option is "active"</p>
+<% end %>
+
+<%= hide_if(f, :status, "active") do %>
+  <p>This is hidden when the status select field option is "active"</p>
+<% end %>
+```
+
 ### Tabs
 
 [Bootstrap Tabs](https://getbootstrap.com/docs/4.0/components/navs/#tabs)
