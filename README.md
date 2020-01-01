@@ -11,7 +11,7 @@ Add `ex_effective_bootstrap` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_effective_bootstrap, "~> 0.1.12"}
+    {:ex_effective_bootstrap, "~> 0.1.13"}
   ]
 end
 ```
