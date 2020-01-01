@@ -10,7 +10,8 @@
     "url": "git://github.com/code-and-effect/ex_effective_bootstrap.git"
   },
   "scripts": {
-    "start": "webpack -p --watch-stdin --color --devtool source-map"
+    "start": "webpack -p --watch-stdin --color --devtool source-map",
+    "deploy": "webpack --mode production"
   },
   "dependencies": {
     "jquery": "*",
