@@ -7,6 +7,7 @@ defmodule ExEffectiveBootstrap.View do
       import ExEffectiveBootstrap.Form
       import ExEffectiveBootstrap.Icons
       import ExEffectiveBootstrap.Inputs
+      import ExEffectiveBootstrap.ShowIf
       import ExEffectiveBootstrap.Submit
 
       # View Helpers

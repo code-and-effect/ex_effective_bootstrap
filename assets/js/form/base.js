@@ -1,9 +1,13 @@
 import TelephoneInput from "../telephone_input/base"
 import Select from "../select/base"
+import ShowIf from "../show_if/show_if"
+import HideIf from "../show_if/hide_if"
 
 const effective_inputs = {
   'telephone_input': TelephoneInput,
-  'select': Select
+  'select': Select,
+  'show_if': ShowIf,
+  'hide_if': HideIf
 }
 
 export default class EffectiveForm {

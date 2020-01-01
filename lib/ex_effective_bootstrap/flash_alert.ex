@@ -33,13 +33,14 @@ defmodule ExEffectiveBootstrap.FlashAlert do
   """
   @spec alert(atom | String.t(), String.t()) :: Phoenix.HTML.Safe.t()
   def alert(type, content) do
+    button_opts = [class: "close", type: "button", "data-dismiss": "alert", "aria-label": "Close"]
+
     content_tag(:div, class: "alert alert-dismissible alert-#{type} fade show", role: "alert") do
-      [
-        content,
-        content_tag(:button, class: "close", type: "button", "data-dismiss": "alert", "aria-label": "Close") do
-          content_tag(:span, {:safe, "&times;"}, "aria-hidden": "true")
-        end
-      ]
+      button = content_tag(:button, button_opts) do
+        content_tag(:span, {:safe, "&times;"}, "aria-hidden": "true")
+      end
+
+      [content, button]
     end
   end
 
@@ -49,5 +50,4 @@ defmodule ExEffectiveBootstrap.FlashAlert do
       _ -> class
     end
   end
-
 end
