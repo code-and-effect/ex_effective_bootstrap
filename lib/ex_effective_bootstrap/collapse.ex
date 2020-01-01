@@ -11,7 +11,8 @@ defmodule ExEffectiveBootstrap.Collapse do
     <p>This is the expanded content</p>
   <% end %>
   """
-  @spec collapse(String.t() | Phoenix.HTML.Safe.t(), Keyword.t(), {:do, Phoenix.HTML.Safe.t()}) :: Phoenix.HTML.Safe.t()
+  @spec collapse(String.t() | Phoenix.HTML.Safe.t(), Keyword.t(), {:do, Phoenix.HTML.Safe.t()}) ::
+          Phoenix.HTML.Safe.t()
   def collapse(label, opts \\ [], do: {:safe, content}) do
     id = "collapse#{:erlang.unique_integer()}"
 

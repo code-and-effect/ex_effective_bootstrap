@@ -57,7 +57,8 @@ defmodule ExEffectiveBootstrap.InputsFor do
     content_tag(:a, [Icons.icon("plus-circle"), " ", opts[:title]], opts)
   end
 
-  @spec effective_inputs_for_remove_link(Phoenix.HTML.FormData.t(), atom, Keyword.t()) :: Phoenix.HTML.safe()
+  @spec effective_inputs_for_remove_link(Phoenix.HTML.FormData.t(), atom, Keyword.t()) ::
+          Phoenix.HTML.safe()
   def effective_inputs_for_remove_link(form, field, opts \\ []) do
     opts =
       [

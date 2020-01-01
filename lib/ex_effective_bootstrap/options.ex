@@ -117,7 +117,7 @@ defmodule ExEffectiveBootstrap.Options do
 
   defp update(options, :select_options, _form, _field, opts) do
     if Enum.member?([:select, :multiple_select, :radios, :checks], options[:type]) do
-      collection = (opts[:select] || opts[:multiple_select] || opts[:radios] || opts[:checks])
+      collection = opts[:select] || opts[:multiple_select] || opts[:radios] || opts[:checks]
       Map.put(options, :select_options, get_select_options(collection))
     else
       Map.put(options, :select_options, false)
@@ -302,7 +302,6 @@ defmodule ExEffectiveBootstrap.Options do
   defp merge_class(options, nil, class), do: Keyword.merge(options, class: class)
   defp merge_class(options, a, b), do: Keyword.merge(options, class: "#{a} #{b}")
 
-
   # Advanced Options Parsing
   defp get_select_options([%_{id: _id} | _] = collection) do
     Enum.into(collection, %{}, fn struct -> {to_string(struct), struct.id} end)
@@ -328,7 +327,7 @@ defmodule ExEffectiveBootstrap.Options do
           input: [class: "custom-control-input"]
         ]
 
-      options[:type] == :checks && opts[:inline]->
+      options[:type] == :checks && opts[:inline] ->
         [
           buttons: false,
           wrapper: [class: "custom-control custom-checkbox custom-control-inline"],
@@ -352,9 +351,9 @@ defmodule ExEffectiveBootstrap.Options do
           input: [class: "custom-control-input"]
         ]
 
-      true -> raise("unexpected custom control")
-    end |> merge(opts[:custom_control])
+      true ->
+        raise("unexpected custom control")
+    end
+    |> merge(opts[:custom_control])
   end
-
-
 end

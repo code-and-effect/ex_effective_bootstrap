@@ -99,17 +99,21 @@ defmodule ExEffectiveBootstrap.Tags do
   defp radio_buttons(form, field, options) do
     hidden = Form.hidden_input(form, field, id: nil, value: "")
 
-    radios = Enum.map(options.select_options, fn {key, value} ->
-      unique_id = "#{Form.input_id(form, field)}_#{:erlang.unique_integer()}"
+    radios =
+      Enum.map(options.select_options, fn {key, value} ->
+        unique_id = "#{Form.input_id(form, field)}_#{:erlang.unique_integer()}"
 
-      custom_input = Options.merge(options.custom_control[:input], options.input) |> Options.merge(id: unique_id)
-      custom_label = Options.merge(options.custom_control[:label], for: unique_id)
+        custom_input =
+          Options.merge(options.custom_control[:input], options.input)
+          |> Options.merge(id: unique_id)
 
-      input = Form.radio_button(form, field, value, custom_input)
-      text = to_string(key)
+        custom_label = Options.merge(options.custom_control[:label], for: unique_id)
 
-      content_tag(:label, [input, text], custom_label)
-    end)
+        input = Form.radio_button(form, field, value, custom_input)
+        text = to_string(key)
+
+        content_tag(:label, [input, text], custom_label)
+      end)
 
     content_tag(:div, [hidden] ++ radios, options.custom_control[:wrapper])
   end
@@ -117,19 +121,22 @@ defmodule ExEffectiveBootstrap.Tags do
   defp radio_inputs(form, field, options) do
     hidden = Form.hidden_input(form, field, id: nil, value: "")
 
-    radios = Enum.map(options.select_options, fn {key, value} ->
-      unique_id = "#{Form.input_id(form, field)}_#{:erlang.unique_integer()}"
+    radios =
+      Enum.map(options.select_options, fn {key, value} ->
+        unique_id = "#{Form.input_id(form, field)}_#{:erlang.unique_integer()}"
 
-      custom_input = Options.merge(options.custom_control[:input], options.input) |> Options.merge(id: unique_id)
-      custom_label = Options.merge(options.custom_control[:label], for: unique_id)
+        custom_input =
+          Options.merge(options.custom_control[:input], options.input)
+          |> Options.merge(id: unique_id)
 
-      input = Form.radio_button(form, field, value, custom_input)
-      label = content_tag(:label, key, custom_label)
+        custom_label = Options.merge(options.custom_control[:label], for: unique_id)
 
-      content_tag(:div, [input, label], options.custom_control[:wrapper])
-    end)
+        input = Form.radio_button(form, field, value, custom_input)
+        label = content_tag(:label, key, custom_label)
+
+        content_tag(:div, [input, label], options.custom_control[:wrapper])
+      end)
 
     [hidden] ++ radios
   end
-
 end

@@ -6,7 +6,8 @@ defmodule ExEffectiveBootstrap.Inputs do
 
   @spec input(Phoenix.HTML.Form.t(), atom) :: Phoenix.HTML.Safe.t()
   @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
-  @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t() | nil, {:do, Phoenix.HTML.Safe.t()}) :: Phoenix.HTML.Safe.t()
+  @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t() | nil, {:do, Phoenix.HTML.Safe.t()}) ::
+          Phoenix.HTML.Safe.t()
   def input(form, field) do
     input(form, field, [])
   end
@@ -16,7 +17,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   end
 
   def input(form, field, opts \\ [], do: block) do
-    opts = Keyword.merge(opts, [value: block])
+    opts = Keyword.merge(opts, value: block)
     effective_input(form, Options.input_type(form, field, opts), field, opts)
   end
 
