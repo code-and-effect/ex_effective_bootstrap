@@ -2,7 +2,7 @@ export default class EffectiveFormLiveSocketHooks {
   constructor() {
     return {
       updated() {
-        $(this.el).find('select').selectpicker('init');
+        $(this.el).trigger('effective-form:initialize');
       },
 
       mounted() {
