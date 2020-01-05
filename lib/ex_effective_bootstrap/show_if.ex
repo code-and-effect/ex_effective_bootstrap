@@ -27,7 +27,8 @@ defmodule ExEffectiveBootstrap.ShowIf do
         Jason.encode!(%{
           method_name: :show_if,
           name: Form.input_name(form, field),
-          value: value
+          value: value,
+          needDisable: !show
         })
     ]
 
@@ -50,7 +51,8 @@ defmodule ExEffectiveBootstrap.ShowIf do
         Jason.encode!(%{
           method_name: :hide_if,
           name: Form.input_name(form, field),
-          value: value
+          value: value,
+          needDisable: hide
         })
     ]
 

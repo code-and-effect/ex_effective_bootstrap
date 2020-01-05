@@ -11,5 +11,10 @@ export default class HideIf {
         $element.find('input,textarea,select').removeAttr('disabled');
       }
     });
+
+    // Maybe disable it now
+    if (options.needDisable) {
+      $element.find('input,textarea,select').prop('disabled', true);
+    }
   }
 }
