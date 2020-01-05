@@ -12,6 +12,7 @@ import EffectiveFormLiveSocketHooks from "./form/live_socket_hooks"
 
 import "./tabs/base"
 import "./inputs_for/base"
+import "./pos_integer/base"
 import "./radios/base"
 
 export { EffectiveForm, EffectiveFormLiveSocketHooks }

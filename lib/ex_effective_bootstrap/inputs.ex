@@ -70,6 +70,12 @@ defmodule ExEffectiveBootstrap.Inputs do
     %Options{} |> to_html(form, field, opts)
   end
 
+  def effective_input(form, :pos_integer, field, opts) do
+    %Options{
+      input: [class: "form-control", "data-pos-integer": "true"]
+    } |> to_html(form, field, opts)
+  end
+
   def effective_input(form, _type, field, opts) do
     %Options{} |> to_html(form, field, opts)
   end

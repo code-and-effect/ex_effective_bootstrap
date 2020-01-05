@@ -64,6 +64,10 @@ defmodule ExEffectiveBootstrap.Tags do
     content_tag(:p, content, Keyword.delete(options.input, :value))
   end
 
+  defp input(form, field, %Options{type: :pos_integer} = options) do
+    apply(Form, :text_input, [form, field, options.input])
+  end
+
   defp input(form, field, options) do
     apply(Form, options.type, [form, field, options.input])
   end
