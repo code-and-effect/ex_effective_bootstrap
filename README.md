@@ -112,6 +112,15 @@ Add to your `app.scss`:
 
 You should now have access to a wide range of beautiful, effective forms inputs and time saving view helpers!
 
+## Errors
+
+Use the following to get a string representation of errors.
+
+```
+ExEffectiveBootstrap.Errors.get(form_or_changeset)
+ExEffectiveBootstrap.Errors.get(form_or_changeset, :foo)
+```
+
 ## Forms
 
 Use `effective_form_for`, a light wrapper around phoenix `form_for`, and the `input f` syntax for
