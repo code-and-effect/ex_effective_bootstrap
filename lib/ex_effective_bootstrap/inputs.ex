@@ -2,7 +2,7 @@ defmodule ExEffectiveBootstrap.Inputs do
   @moduledoc "Renders all the form inputs"
 
   use Phoenix.HTML
-  alias ExEffectiveBootstrap.{Icons, Tags, Options}
+  alias ExEffectiveBootstrap.{Errors, FlashAlert, Icons, Tags, Options}
 
   @spec input(Phoenix.HTML.Form.t(), atom) :: Phoenix.HTML.Safe.t()
   @spec input(Phoenix.HTML.Form.t(), atom, Keyword.t()) :: Phoenix.HTML.Safe.t()
@@ -19,6 +19,20 @@ defmodule ExEffectiveBootstrap.Inputs do
   def input(form, field, opts \\ [], do: block) do
     opts = Keyword.merge(opts, value: block)
     effective_input(form, Options.input_type(form, field, opts), field, opts)
+  end
+
+  @doc "Displays a dismissable alert for this field if there is an error"
+  @spec error(Phoenix.HTML.Form.t(), atom) :: Phoenix.HTML.Safe.t()
+  def error(form, field) do
+    message = Errors.get(form, field)
+    if message != "", do: FlashAlert.alert(:danger, "#{field} #{message}."), else: {:safe, ""}
+  end
+
+  @doc "Displays one dismissable alert for all errors of this form"
+  @spec errors(Phoenix.HTML.Form.t()) :: Phoenix.HTML.Safe.t()
+  def errors(form) do
+    message = Errors.get(form)
+    if message != "", do: FlashAlert.alert(:danger, "#{message}."), else: {:safe, ""}
   end
 
   @spec effective_input(Phoenix.HTML.Form.t(), atom, atom, Keyword.t()) :: Phoenix.HTML.Safe.t()

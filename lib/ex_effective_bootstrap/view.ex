@@ -5,7 +5,6 @@ defmodule ExEffectiveBootstrap.View do
     quote do
       # Form Helpers
       import ExEffectiveBootstrap.Form
-      import ExEffectiveBootstrap.Icons
       import ExEffectiveBootstrap.Inputs
       import ExEffectiveBootstrap.ShowIf
       import ExEffectiveBootstrap.Submit
@@ -13,6 +12,7 @@ defmodule ExEffectiveBootstrap.View do
       # View Helpers
       import ExEffectiveBootstrap.Collapse
       import ExEffectiveBootstrap.FlashAlert
+      import ExEffectiveBootstrap.Icons
       import ExEffectiveBootstrap.InputsFor
       import ExEffectiveBootstrap.Navs
       import ExEffectiveBootstrap.Tabs

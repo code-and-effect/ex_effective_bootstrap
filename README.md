@@ -168,6 +168,9 @@ The `as: type` is totally optional, `input` will automatically detect the correc
 <%= input f, :foo, checks: options %> # TODO
 <%= input f, :foo, as: :time_input %> # TODO
 <%= input f, :foo, as: :radio_button %> # TODO
+
+<%= error f, :foo %>
+<%= errors f %>
 ```
 
 Every input can be passed any options, such as:
