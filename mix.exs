@@ -29,14 +29,14 @@ defmodule ExEffectiveBootstrap.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0 or ~> 1.4.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:jason, "~> 1.0"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_html, "~> 2.1"},
+      {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.0"},
-      {:ecto, "~> 2.2 or ~> 3.0"},
+      {:ecto, "~> 3.4"},
       {:ex_check, ">= 0.0.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false}
     ]
   end
 
