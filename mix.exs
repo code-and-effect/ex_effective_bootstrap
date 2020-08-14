@@ -1,7 +1,7 @@
 defmodule ExEffectiveBootstrap.MixProject do
   use Mix.Project
 
-  @version "0.1.17"
+  @version "0.1.18"
 
   def project do
     [
@@ -34,7 +34,7 @@ defmodule ExEffectiveBootstrap.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.0"},
       {:ecto, "~> 3.4"},
-      {:ex_check, ">= 0.0.0", only: :dev, runtime: false},
+      {:ex_check, "~> 0.12", only: :dev, runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false}
     ]
